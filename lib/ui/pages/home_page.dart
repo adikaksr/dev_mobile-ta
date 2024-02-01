@@ -1,196 +1,217 @@
+import 'package:easkripsi/ui/pages/akun_page.dart';
+import 'package:easkripsi/ui/pages/bimbingan_page.dart';
+import 'package:easkripsi/ui/widgets/dosen_tile.dart';
 import 'package:flutter/material.dart';
 import '../../shared/theme.dart';
-import '../widgets/fl_charts.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Widget chartBar() {
+    Widget header() {
       return Container(
-        padding: const EdgeInsets.all(20),
-        margin: const EdgeInsets.only(top: 5),
-        height: 500,
-        decoration: BoxDecoration(
-          color: kWhiteColor,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: kGreyColor),
+        margin: const EdgeInsets.only(
+          left: 24,
+          right: 24,
+          top: 30,
         ),
-        child: const BarChartSample2(),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                child: Text(
+                  'Hello,\nAdika Nuraga Kanaka Stamba Rucira',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 24,
+                    fontWeight: semiBold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AkunPage()),
+                );
+              },
+              child: Container(
+                width: 45,
+                height: 45,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage('assets/image_avatar.png'),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       );
     }
 
-    Widget listPengumuman() {
+    Widget bimbinganCard() {
       return Container(
-        padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.only(
-          top: 20,
-          bottom: 60,
+          left: 24,
+          right: 24,
+          top: 23,
         ),
+        width: 300,
+        height: 170,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: kCardColor,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: kGreyColor),
         ),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Pengumuman",
-                style: blackTextStylePS.copyWith(
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            const SizedBox(height: 40),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Lihat pengumuman terbaru mengenai info surat edaran yang diterbitkan",
-                style: gray2TextStylePS.copyWith(
-                  fontSize: 15,
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Daftar Pengumuman",
-                style: grayTextStylePS.copyWith(
-                  fontSize: 15,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: thin,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Color(0xFF696CFF)),
-                        borderRadius: BorderRadius.circular(6),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Siap selesaikan\nskripsimu?',
+                        style: blackTextStyle.copyWith(
+                          fontSize: 20,
+                          fontWeight: semiBold,
+                        ),
                       ),
-                    ),
-                    onPressed: () => {},
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 18,
-                          height: 18,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(
-                                'assets/icon_surat.png',
-                              ),
+                      Container(
+                        margin: EdgeInsets.only(top: 25),
+                        width: 150,
+                        height: 38,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BimbinganPage()),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: kWhiteColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(9),
+                            ),
+                          ),
+                          child: Text(
+                            'Mulai Bimbingan',
+                            style: blueTextStyle.copyWith(
+                              fontSize: 12,
+                              fontWeight: semiBold,
                             ),
                           ),
                         ),
-                        const SizedBox(width: 15),
-                        Text(
-                          "SE Nomor 1163/UN11/HK.00/2020",
-                          style: gray2TextStylePS.copyWith(
-                            fontSize: 12,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    )),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(
+                    top: 25,
+                  ),
+                  height: 120,
+                  width: 120,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/card_image.png'),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget listPembimbing() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 30,
+          left: 24,
+          right: 24,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Dosen Pembimbing',
+              style: blackTextStyle.copyWith(
+                fontSize: 18,
+                fontWeight: semiBold,
               ),
+            ),
+            const DosenTile(
+              name: 'Viska Mutiawani B.IT, M.IT',
+              status: 'Pembimbing 1',
+              imageUrl: 'assets/Acatar.png',
+            ),
+            const DosenTile(
+              name: 'Alim Misbullah S.Si., M.S',
+              status: 'Pembimbing 2',
+              imageUrl: 'assets/Acatar.png',
             ),
           ],
         ),
       );
     }
 
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: AppBar(
-          flexibleSpace: Container(
-            color: Colors.white,
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 10,
-                  left: 15,
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      "assets/image_usk.png",
-                      scale: 2.5,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 6),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'EASKRIPSI',
-                            style: blackTextStyle.copyWith(
-                              fontSize: 20,
-                              fontWeight: bold,
-                            ),
-                          ),
-                          Text(
-                            "S1-Informatika USK",
-                            style: blackTextStyle.copyWith(
-                              fontSize: 11,
-                              fontWeight: bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 25),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const CircleAvatar(),
-                        iconSize: 40,
-                      ),
-                    )
-                  ],
-                ),
+    Widget listPenguji() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 30,
+          left: 24,
+          right: 24,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Dosen Penguji',
+              style: blackTextStyle.copyWith(
+                fontSize: 18,
+                fontWeight: semiBold,
               ),
             ),
-          ),
-          leadingWidth: 100,
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          elevation: 0,
+            const DosenTile(
+              name: 'Dosen Penguji 1',
+              status: 'Penguji 1',
+              imageUrl: 'assets/Acatar.png',
+            ),
+            const DosenTile(
+              name: 'Dosen Penguji 2',
+              status: 'Penguji 2',
+              imageUrl: 'assets/Acatar.png',
+            ),
+            const DosenTile(
+              name: 'Dosen Penguji 3',
+              status: 'Penguji 3',
+              imageUrl: 'assets/Acatar.png',
+            ),
+            SizedBox(
+              height: 100,
+            )
+          ],
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 20,
-          right: 20,
-        ),
-        child: Center(
-          child: ListView(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              chartBar(),
-              listPengumuman(),
-              SizedBox(
-                height: 20,
-              )
-            ],
-          ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: kBGColor2,
+      body: SafeArea(
+        child: ListView(
+          children: [
+            header(),
+            bimbinganCard(),
+            listPembimbing(),
+            listPenguji(),
+          ],
         ),
       ),
     );

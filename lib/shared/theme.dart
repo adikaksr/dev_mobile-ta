@@ -14,6 +14,8 @@ Color kGreenColor = const Color(0xff0CC685);
 Color kBlueColor = const Color(0xff696CFF);
 Color kWhiteColor = const Color(0xffFFFFFF);
 Color kBGColor = const Color(0xffFAFAFA);
+Color kBGColor2 = const Color(0xffF5F5F9);
+Color kCardColor = const Color(0xffCFECFE);
 
 TextStyle blackTextStyle = GoogleFonts.poppins(
   color: kBlackColor,

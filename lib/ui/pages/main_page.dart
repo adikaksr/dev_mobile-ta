@@ -1,6 +1,12 @@
+import 'package:easkripsi/cubit/page_cubit.dart';
+import 'package:easkripsi/ui/pages/bimbingan_page.dart';
+import 'package:easkripsi/ui/pages/form_page.dart';
 import 'package:easkripsi/ui/pages/home_page.dart';
+import 'package:easkripsi/ui/pages/jadwal_page.dart';
+import 'package:easkripsi/ui/pages/kehadiran_page.dart';
 import 'package:easkripsi/ui/widgets/custom_bottom_navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../shared/theme.dart';
 
 class MainPage extends StatelessWidget {
@@ -8,8 +14,21 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget buildContent() {
-      return HomePage();
+    Widget buildContent(int currentIndex) {
+      switch (currentIndex) {
+        case 0:
+          return const HomePage();
+        case 1:
+          return const FormPage();
+        case 2:
+          return const BimbinganPage();
+        case 3:
+          return const JadwalPage();
+        case 4:
+          return const KehadiranPage();
+        default:
+          return const HomePage();
+      }
     }
 
     Widget customBottomNavigation() {
@@ -21,34 +40,43 @@ class MainPage extends StatelessWidget {
           decoration: BoxDecoration(
             color: kWhiteColor,
           ),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               //HOME
               CustomBottomNavigation(
-                imageUrl: 'assets/icon_home.png',
+                index: 0,
+                iconKey: 'home',
                 title: 'Beranda',
-                isSelected: true,
+                context: context,
               ),
               //FORM
               CustomBottomNavigation(
-                imageUrl: 'assets/icon_form.png',
+                index: 1,
+                iconKey: 'form',
                 title: 'Form',
+                context: context,
               ),
               //BIMBINGAN
               CustomBottomNavigation(
-                imageUrl: 'assets/icon_bimbingan.png',
+                index: 2,
+                iconKey: 'bimbingan',
                 title: 'Bimbingan',
+                context: context,
               ),
               //JADWAL
               CustomBottomNavigation(
-                imageUrl: 'assets/icon_jadwal.png',
+                index: 3,
+                iconKey: 'jadwal',
                 title: 'Jadwal',
+                context: context,
               ),
               //KEHADIRAN
               CustomBottomNavigation(
-                imageUrl: 'assets/icon_kehadiran.png',
+                index: 4,
+                iconKey: 'kehadiran',
                 title: 'Kehadiran',
+                context: context,
               ),
             ],
           ),
@@ -56,14 +84,18 @@ class MainPage extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      backgroundColor: kBGColor,
-      body: Stack(
-        children: [
-          buildContent(),
-          customBottomNavigation(),
-        ],
-      ),
+    return BlocBuilder<PageCubit, int>(
+      builder: (context, currentIndex) {
+        return Scaffold(
+          backgroundColor: kBGColor,
+          body: Stack(
+            children: [
+              buildContent(currentIndex),
+              customBottomNavigation(),
+            ],
+          ),
+        );
+      },
     );
   }
 }

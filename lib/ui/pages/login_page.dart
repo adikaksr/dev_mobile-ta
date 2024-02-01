@@ -1,4 +1,5 @@
 import 'package:easkripsi/ui/widgets/custom_button.dart';
+import 'package:easkripsi/ui/widgets/custom_dropdown.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import '../../shared/theme.dart';
@@ -54,7 +55,7 @@ class LoginPage extends StatelessWidget {
     Widget welcome() {
       return Container(
         margin: const EdgeInsets.only(
-          top: 80,
+          top: 50,
         ),
         child: Text(
           'Selamat Datang',
@@ -64,6 +65,23 @@ class LoginPage extends StatelessWidget {
             fontWeight: semiBold,
           ),
         ),
+      );
+    }
+
+    Widget userRole() {
+      return CustomDropdown(
+        items: [
+          'Pilih Login Sebagai',
+          'Mahasiswa',
+          'Dosen',
+          'Koordinator TA',
+          'Admin',
+        ],
+        title: 'Login Sebagai',
+        hint: 'Pilih Login Sebagai',
+        onChanged: (value) {
+          print('Selected item: $value');
+        },
       );
     }
 
@@ -108,6 +126,7 @@ class LoginPage extends StatelessWidget {
         ),
         child: Column(
           children: [
+            userRole(),
             idInput(),
             passwordInput(),
             loginButton(),
