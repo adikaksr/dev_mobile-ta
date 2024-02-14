@@ -9,6 +9,7 @@ final icons = {
   'bimbingan': Icons.chat_bubble_rounded,
   'jadwal': Icons.calendar_today_rounded,
   'kehadiran': Icons.assignment_turned_in_rounded,
+  'mahasiswa': Icons.group,
 };
 
 class CustomBottomNavigation extends StatelessWidget {

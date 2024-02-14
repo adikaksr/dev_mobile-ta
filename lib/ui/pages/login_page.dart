@@ -1,11 +1,25 @@
+import 'package:easkripsi/services/login_service.dart';
+import 'package:easkripsi/ui/pages/dosen/main_page_dosen.dart';
+import 'package:easkripsi/ui/pages/koordinator%20ta/koordinator_ta_page.dart';
+import 'package:easkripsi/ui/pages/main_page.dart';
+import 'package:easkripsi/ui/pages/operator/operator_page.dart';
 import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_dropdown.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import '../../shared/theme.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String? _selectedRole;
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +89,13 @@ class LoginPage extends StatelessWidget {
           'Mahasiswa',
           'Dosen',
           'Koordinator TA',
-          'Admin',
+          'Operator',
         ],
         title: 'Login Sebagai',
         hint: 'Pilih Login Sebagai',
         onChanged: (value) {
-          print('Selected item: $value');
+          _selectedRole = value;
+          print(_selectedRole);
         },
       );
     }
@@ -105,12 +120,32 @@ class LoginPage extends StatelessWidget {
         return CustomButton(
           title: 'Masuk',
           onPressed: () {
-            Navigator.pushNamed(context, '/main');
+            if (_selectedRole == 'Pilih Login Sebagai') {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Mohon pilih user')),
+              );
+            } else if (_selectedRole == 'Mahasiswa') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MainPage()),
+              );
+            } else if (_selectedRole == 'Dosen') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MainPageDosen()),
+              );
+            } else if (_selectedRole == 'Koordinator TA') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => KoordinatorTAPage()),
+              );
+            } else if (_selectedRole == 'Operator') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OperatorPage()),
+              );
+            }
           },
-          margin: const EdgeInsets.only(
-            top: 30,
-            bottom: 15,
-          ),
         );
       }
 
@@ -135,18 +170,21 @@ class LoginPage extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      backgroundColor: kBGColor,
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24,
+    return ScaffoldMessenger(
+      child: Scaffold(
+        key: _scaffoldMessengerKey,
+        backgroundColor: kBGColor,
+        body: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+            ),
+            children: [
+              header(),
+              welcome(),
+              inputSection(),
+            ],
           ),
-          children: [
-            header(),
-            welcome(),
-            inputSection(),
-          ],
         ),
       ),
     );

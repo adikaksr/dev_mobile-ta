@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../shared/theme.dart';
 
 class JamPicker extends StatelessWidget {
   final String title;

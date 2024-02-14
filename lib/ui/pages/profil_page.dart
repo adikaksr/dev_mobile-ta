@@ -7,8 +7,8 @@ class ProfilPage extends StatelessWidget {
   ProfilPage({Key? key}) : super(key: key);
 
   final List<Widget> myTab = [
-    const Tab(text: "Data Pribadi"),
-    const Tab(text: "Data Orangtua"),
+    Tab(child: Text("Data Pribadi", style: TextStyle(color: Colors.white))),
+    Tab(child: Text("Data Orangtua", style: TextStyle(color: Colors.white))),
   ];
 
   @override

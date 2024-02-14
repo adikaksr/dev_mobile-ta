@@ -4,14 +4,27 @@ import '../../shared/theme.dart';
 
 class DetailPresensi extends StatelessWidget {
   final String title;
+  final String status;
 
-  const DetailPresensi({
-    super.key,
-    required this.title,
-  });
+  const DetailPresensi({super.key, required this.title, required this.status});
 
   @override
   Widget build(BuildContext context) {
+    Color statusColor;
+    switch (status) {
+      case 'Present':
+        statusColor = kGreenColor;
+        break;
+      case 'Absent':
+        statusColor = kRedColor;
+        break;
+      case 'Pending':
+        statusColor = kGreyColor3;
+        break;
+      default:
+        statusColor = kGrayColor;
+    }
+
     return Container(
       margin: EdgeInsets.only(
         bottom: 10,
@@ -23,7 +36,6 @@ class DetailPresensi extends StatelessWidget {
           SizedBox(width: 12),
           Flexible(
             flex: 10,
-            // Add this
             child: Text(
               title,
               overflow: TextOverflow.ellipsis,
@@ -34,16 +46,20 @@ class DetailPresensi extends StatelessWidget {
           ),
           Spacer(),
           Container(
-            padding: EdgeInsets.all(8.0), // Add padding to the text
+            padding: EdgeInsets.all(6.0),
+            constraints: BoxConstraints(minWidth: 60),
             decoration: BoxDecoration(
-              color: kGreenColor,
-              borderRadius: BorderRadius.circular(100.0), // Add border radius
+              color: statusColor,
+              borderRadius: BorderRadius.circular(100.0),
             ),
-            child: Text(
-              'PRESENT',
-              style: whiteTextStyle.copyWith(
-                fontSize: 10,
-                fontWeight: medium,
+            child: Center(
+              child: Text(
+                status.toUpperCase(),
+                style: whiteTextStyle.copyWith(
+                  fontSize: 10,
+                  fontWeight: medium,
+                  color: Colors.white, // Set the text color to white
+                ),
               ),
             ),
           ),

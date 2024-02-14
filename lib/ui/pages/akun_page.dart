@@ -1,5 +1,4 @@
 import 'package:easkripsi/shared/theme.dart';
-import 'package:easkripsi/ui/pages/home_page.dart';
 import 'package:easkripsi/ui/pages/login_page.dart';
 import 'package:easkripsi/ui/pages/profil_page.dart';
 import 'package:flutter/material.dart';
@@ -132,8 +131,7 @@ class AkunPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
+                      MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
                   child: const Text(

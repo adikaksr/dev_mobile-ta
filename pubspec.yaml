@@ -20,6 +20,8 @@ dependencies:
   intl: ^0.18.1
   emoji_picker_flutter: ^1.6.3
   get: ^4.6.6
+  http: ^1.2.0
+  shared_preferences: ^2.2.2
   flutter:
     sdk: flutter
 
@@ -31,4 +33,6 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
+    - assets/data/
+
   uses-material-design: true

@@ -1,0 +1,82 @@
+[
+  {
+    "date": "2024-02-12",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 1 Informatika",
+      "status": "Present"
+    }
+  },
+  {
+    "date": "2024-02-14",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 1 Informatika",
+      "status": "Present"
+    }
+  },
+  {
+    "date": "2024-02-14",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 2 Informatika",
+      "status": "Absent"
+    }
+  },
+  {
+    "date": "2024-02-14",
+    "time": "10:00-12:00",
+    "presensi": {
+      "dosen": "Dosen 11 Informatika",
+      "status": "Present"
+    }
+  },
+  {
+    "date": "2024-02-14",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 3 Informatika",
+      "status": "Present"
+    }
+  },
+  {
+    "date": "2024-02-15",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 4 Informatika",
+      "status": "Present"
+    }
+  },
+  {
+    "date": "2024-02-16",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 100 Informatika",
+      "status": "Present"
+    }
+  },
+  {
+    "date": "2024-02-13",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 3 Informatika",
+      "status": "Present"
+    }
+  },
+  {
+    "date": "2024-02-14",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 4 Informatika",
+      "status": "Present"
+    }
+  },
+  {
+    "date": "2024-02-14",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 5 Informatika",
+      "status": "Pending"
+    }
+  }
+]
