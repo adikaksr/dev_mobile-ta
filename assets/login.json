@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "nimNip": "123",
+      "password": "123",
+      "role": "Mahasiswa"
+    },
+    {
+      "nimNip": "456",
+      "password": "456",
+      "role": "Dosen"
+    },
+    {
+      "nimNip": "789",
+      "password": "789",
+      "role": "Koordinator TA"
+    }
+  ]
+}

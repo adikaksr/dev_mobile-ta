@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1022899410008",
+    "project_id": "easkripsi",
+    "storage_bucket": "easkripsi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1022899410008:android:ed2a097c5a04f73fcba62d",
+        "android_client_info": {
+          "package_name": "com.adika.easkripsi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGr_QRnbogKGRSCuwiso98HHVZ13JDiAQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

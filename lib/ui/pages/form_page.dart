@@ -41,22 +41,22 @@ class FormPage extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    const CustomTextFormField(
-                      title: 'Nama Lengkap',
-                      hintText: 'Nama Lengkap Anda',
-                    ),
-                    const CustomTextFormField(
-                      title: 'Tempat/Tanggal Lahir',
-                      hintText: 'Tempat/Tanggal Lahir Anda',
-                    ),
-                    const CustomTextFormField(
-                      title: 'NPM',
-                      hintText: 'NPM Anda',
-                    ),
-                    const CustomTextFormField(
-                      title: 'Prodi/Jurusan',
-                      hintText: 'Prodi/Jurusan Anda',
-                    ),
+                    // const CustomTextFormField(
+                    //   title: 'Nama Lengkap',
+                    //   hintText: 'Nama Lengkap Anda',
+                    // ),
+                    // const CustomTextFormField(
+                    //   title: 'Tempat/Tanggal Lahir',
+                    //   hintText: 'Tempat/Tanggal Lahir Anda',
+                    // ),
+                    // const CustomTextFormField(
+                    //   title: 'NPM',
+                    //   hintText: 'NPM Anda',
+                    // ),
+                    // const CustomTextFormField(
+                    //   title: 'Prodi/Jurusan',
+                    //   hintText: 'Prodi/Jurusan Anda',
+                    // ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 30,

@@ -1,4 +1,4 @@
-package com.example.easkripsi
+package com.adika.easkripsi
 
 import io.flutter.embedding.android.FlutterActivity
 

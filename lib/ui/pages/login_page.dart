@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easkripsi/services/login_service.dart';
 import 'package:easkripsi/ui/pages/dosen/main_page_dosen.dart';
 import 'package:easkripsi/ui/pages/koordinator%20ta/koordinator_ta_page.dart';
@@ -7,6 +9,7 @@ import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_dropdown.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import '../../controller/login_controller.dart';
 import '../../shared/theme.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,8 +21,59 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String? _selectedRole;
+  LoginController loginController = LoginController();
+  final idInput = TextEditingController();
+  final passwordInput = TextEditingController();
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
+
+  void handleLogin() async {
+    String nimNip = idInput.text;
+    String password = passwordInput.text;
+
+    // Show a loading indicator
+    _scaffoldMessengerKey.currentState?.showSnackBar(
+      SnackBar(
+        content: Row(
+          children: <Widget>[
+            CircularProgressIndicator(),
+            Text("  Logging in..."),
+          ],
+        ),
+      ),
+    );
+
+    try {
+      String role =
+          await loginController.login(nimNip, password, _selectedRole!);
+
+      // Hide the loading indicator
+      _scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+
+      if (role == 'Mahasiswa') {
+        Navigator.pushReplacementNamed(context, '/main');
+      } else if (role == 'Dosen') {
+        Navigator.pushReplacementNamed(context, '/main-dosen');
+      } else if (role == 'Koordinator TA') {
+        Navigator.pushReplacementNamed(context, '/main-koorta');
+      } else if (role == 'Operator') {
+        Navigator.pushReplacementNamed(context, '/main-operator');
+      } else {
+        // Show an error message
+        _scaffoldMessengerKey.currentState?.showSnackBar(
+          SnackBar(content: Text('Failed to login')),
+        );
+      }
+    } catch (error) {
+      // Hide the loading indicator
+      _scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+
+      // Show an error message
+      _scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(content: Text('Failed to login: $error')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,68 +138,65 @@ class _LoginPageState extends State<LoginPage> {
 
     Widget userRole() {
       return CustomDropdown(
-        items: [
-          'Pilih Login Sebagai',
-          'Mahasiswa',
-          'Dosen',
-          'Koordinator TA',
-          'Operator',
-        ],
         title: 'Login Sebagai',
-        hint: 'Pilih Login Sebagai',
+        items: ['Mahasiswa', 'Dosen', 'Koordinator TA', 'Operator'],
         onChanged: (value) {
-          _selectedRole = value;
-          print(_selectedRole);
+          setState(() {
+            _selectedRole = value;
+          });
         },
       );
     }
 
     Widget inputSection() {
-      Widget idInput() {
-        return const CustomTextFormField(
+      Widget idForm() {
+        return CustomTextFormField(
           title: 'NPM/NIP',
           hintText: 'NPM/NIP',
+          controller: idInput,
         );
       }
 
-      Widget passwordInput() {
-        return const CustomTextFormField(
+      Widget passwordForm() {
+        return CustomTextFormField(
           title: 'Kata Sandi',
           hintText: 'Kata Sandi',
           obscureText: true,
+          controller: passwordInput,
         );
       }
 
       Widget loginButton() {
         return CustomButton(
           title: 'Masuk',
-          onPressed: () {
-            if (_selectedRole == 'Pilih Login Sebagai') {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Mohon pilih user')),
-              );
-            } else if (_selectedRole == 'Mahasiswa') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MainPage()),
-              );
-            } else if (_selectedRole == 'Dosen') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MainPageDosen()),
-              );
-            } else if (_selectedRole == 'Koordinator TA') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => KoordinatorTAPage()),
-              );
-            } else if (_selectedRole == 'Operator') {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => OperatorPage()),
-              );
-            }
-          },
+          onPressed: handleLogin,
+          // onPressed: () {
+          //   if (_selectedRole == 'Pilih Login Sebagai') {
+          //     ScaffoldMessenger.of(context).showSnackBar(
+          //       SnackBar(content: Text('Mohon pilih user')),
+          //     );
+          //   } else if (_selectedRole == 'Mahasiswa') {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => MainPage()),
+          //     );
+          //   } else if (_selectedRole == 'Dosen') {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => MainPageDosen()),
+          //     );
+          //   } else if (_selectedRole == 'Koordinator TA') {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => KoordinatorTAPage()),
+          //     );
+          //   } else if (_selectedRole == 'Operator') {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => OperatorPage()),
+          //     );
+          //   }
+          // },
         );
       }
 
@@ -162,8 +213,8 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             userRole(),
-            idInput(),
-            passwordInput(),
+            idForm(),
+            passwordForm(),
             loginButton(),
           ],
         ),

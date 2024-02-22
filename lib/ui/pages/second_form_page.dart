@@ -37,22 +37,22 @@ class SecondFormPage extends StatelessWidget {
           // key: _formKey,
           child: Column(
             children: <Widget>[
-              CustomTextFormField(
-                title: "Indeks Prestasi Kumulatif",
-                hintText: 'Indeks Prestasi Kumulatif Anda',
-              ),
-              CustomTextFormField(
-                title: "Jumlah SKS Lulus",
-                hintText: 'Jumlah SKS Lulus Anda',
-              ),
-              CustomTextFormField(
-                title: "Jumlah SKS Nilai D",
-                hintText: 'Jumlah SKS Nilai D Anda',
-              ),
-              CustomTextFormField(
-                title: "Bidang Minat",
-                hintText: 'Bidang Minat Anda',
-              ),
+              // CustomTextFormField(
+              //   title: "Indeks Prestasi Kumulatif",
+              //   hintText: 'Indeks Prestasi Kumulatif Anda',
+              // ),
+              // CustomTextFormField(
+              //   title: "Jumlah SKS Lulus",
+              //   hintText: 'Jumlah SKS Lulus Anda',
+              // ),
+              // CustomTextFormField(
+              //   title: "Jumlah SKS Nilai D",
+              //   hintText: 'Jumlah SKS Nilai D Anda',
+              // ),
+              // CustomTextFormField(
+              //   title: "Bidang Minat",
+              //   hintText: 'Bidang Minat Anda',
+              // ),
               CustomButton(
                   title: "Selanjutnya",
                   onPressed: () {

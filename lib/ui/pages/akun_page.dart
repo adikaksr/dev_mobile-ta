@@ -1,10 +1,13 @@
+import 'package:easkripsi/controller/login_controller.dart';
 import 'package:easkripsi/shared/theme.dart';
 import 'package:easkripsi/ui/pages/login_page.dart';
 import 'package:easkripsi/ui/pages/profil_page.dart';
 import 'package:flutter/material.dart';
 
 class AkunPage extends StatelessWidget {
-  const AkunPage({Key? key}) : super(key: key);
+  final LoginController loginController = LoginController();
+
+  AkunPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +131,8 @@ class AkunPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           side: const BorderSide(color: Color(0xFFDFE0EB)),
                           borderRadius: BorderRadius.circular(6))),
-                  onPressed: () {
+                  onPressed: () async {
+                    await loginController.logout();
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => LoginPage()),

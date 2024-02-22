@@ -9,13 +9,20 @@ import 'package:easkripsi/ui/pages/kehadiran_page.dart';
 import 'package:easkripsi/ui/pages/koordinator%20ta/koordinator_ta_page.dart';
 import 'package:easkripsi/ui/pages/login_page.dart';
 import 'package:easkripsi/ui/pages/main_page.dart';
+import 'package:easkripsi/ui/pages/operator/operator_page.dart';
 import 'package:easkripsi/ui/pages/second_form_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'ui/pages/splash_page.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -41,9 +48,9 @@ class MyApp extends StatelessWidget {
           '/form': (context) => FormPage(),
           '/second-form': (context) => SecondFormPage(),
           '/chat-room': (context) => ChatRoomPage(),
-          '/maindosen': (context) => const MainPageDosen(),
-          'main': (context) => const MainPage(),
-          '/mainkoorta': (context) => KoordinatorTAPage(),
+          '/main-dosen': (context) => const MainPageDosen(),
+          '/main-koorta': (context) => KoordinatorTAPage(),
+          '/main-operator': (context) => OperatorPage(),
         },
       ),
     );

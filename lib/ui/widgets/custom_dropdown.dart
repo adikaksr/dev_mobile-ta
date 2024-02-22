@@ -21,12 +21,6 @@ class _CustomDropdownState extends State<CustomDropdown> {
   String? selectedItem;
 
   @override
-  void initState() {
-    super.initState();
-    selectedItem = widget.items[0];
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
@@ -50,8 +44,9 @@ class _CustomDropdownState extends State<CustomDropdown> {
               child: DropdownButton<String>(
                 isExpanded: true,
                 value: selectedItem,
-                hint:
-                    Text(selectedItem == null ? 'Login Sebagai' : widget.hint!),
+                hint: Text(selectedItem == null
+                    ? 'Pilih Login Sebagai'
+                    : selectedItem!),
                 items: widget.items.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
