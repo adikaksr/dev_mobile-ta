@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:easkripsi/services/login_service.dart';
 import 'package:easkripsi/ui/pages/dosen/main_page_dosen.dart';
 import 'package:easkripsi/ui/pages/koordinator%20ta/koordinator_ta_page.dart';
 import 'package:easkripsi/ui/pages/main_page.dart';
