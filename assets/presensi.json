@@ -1,6 +1,6 @@
 [
   {
-    "date": "2024-02-12",
+    "date": "2024-02-26",
     "time": "08:00-10:00",
     "presensi": {
       "dosen": "Dosen 1 Informatika",
@@ -16,7 +16,7 @@
     }
   },
   {
-    "date": "2024-02-14",
+    "date": "2024-02-26",
     "time": "08:00-10:00",
     "presensi": {
       "dosen": "Dosen 2 Informatika",
@@ -32,7 +32,7 @@
     }
   },
   {
-    "date": "2024-02-14",
+    "date": "2024-02-26",
     "time": "08:00-10:00",
     "presensi": {
       "dosen": "Dosen 3 Informatika",
@@ -40,7 +40,7 @@
     }
   },
   {
-    "date": "2024-02-15",
+    "date": "2024-02-26",
     "time": "08:00-10:00",
     "presensi": {
       "dosen": "Dosen 4 Informatika",
@@ -72,7 +72,7 @@
     }
   },
   {
-    "date": "2024-02-14",
+    "date": "2024-02-26",
     "time": "08:00-10:00",
     "presensi": {
       "dosen": "Dosen 5 Informatika",
