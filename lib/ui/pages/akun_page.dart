@@ -131,11 +131,34 @@ class AkunPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           side: const BorderSide(color: Color(0xFFDFE0EB)),
                           borderRadius: BorderRadius.circular(6))),
-                  onPressed: () async {
-                    await loginController.logout();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Keluar'),
+                          content: Text('Apakah anda yakin ingin keluar?'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('Batal'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Keluar'),
+                              onPressed: () async {
+                                await loginController.logout();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginPage()),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
                   child: const Text(
