@@ -1,14 +1,11 @@
-import 'dart:math';
-import 'package:easkripsi/ui/pages/dosen/main_page_dosen.dart';
-import 'package:easkripsi/ui/pages/koordinator%20ta/koordinator_ta_page.dart';
-import 'package:easkripsi/ui/pages/main_page.dart';
-import 'package:easkripsi/ui/pages/operator/operator_page.dart';
 import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_dropdown.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import '../../controller/login_controller.dart';
 import '../../shared/theme.dart';
+import 'register_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -24,6 +21,9 @@ class _LoginPageState extends State<LoginPage> {
   final passwordInput = TextEditingController();
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
+  final _auth = FirebaseAuth.instance;
+
+  set _isLoading(bool _isLoading) {}
 
   void handleLogin() async {
     String nimNip = idInput.text;
@@ -167,7 +167,31 @@ class _LoginPageState extends State<LoginPage> {
       Widget loginButton() {
         return CustomButton(
           title: 'Masuk',
-          onPressed: handleLogin,
+          onPressed: () async {
+            setState(() {
+              _isLoading = true;
+            });
+            try {
+              final navigator = Navigator.of(context);
+              final _emailController = TextEditingController();
+              final email = _emailController.text;
+              final _passwordController = TextEditingController();
+              final password = _passwordController.text;
+              await _auth.signInWithEmailAndPassword(
+                  email: email, password: password);
+              // Replace 'path_to_chat_page.dart' with the actual file path
+
+              var ChatPage;
+              navigator.pushReplacementNamed(ChatPage.id);
+            } catch (e) {
+              final snackbar = SnackBar(content: Text(e.toString()));
+              ScaffoldMessenger.of(context).showSnackBar(snackbar);
+            } finally {
+              setState(() {
+                _isLoading = false;
+              });
+            }
+          },
           // onPressed: () {
           //   if (_selectedRole == 'Pilih Login Sebagai') {
           //     ScaffoldMessenger.of(context).showSnackBar(
@@ -198,6 +222,25 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
 
+      Widget regisButton() {
+        return GestureDetector(
+          onTap: () {
+            // Navigate to the registration page
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => RegisterPage()),
+            );
+          },
+          child: Text(
+            'Daftar',
+            style: TextStyle(
+              color: Colors.blue,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        );
+      }
+
       return Container(
         margin: const EdgeInsets.only(top: 30),
         padding: const EdgeInsets.symmetric(
@@ -214,6 +257,7 @@ class _LoginPageState extends State<LoginPage> {
             idForm(),
             passwordForm(),
             loginButton(),
+            regisButton()
           ],
         ),
       );

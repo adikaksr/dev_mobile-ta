@@ -26,6 +26,7 @@ dependencies:
   cloud_firestore: ^4.15.5
   flutter:
     sdk: flutter
+  firebase_auth: ^4.17.9
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -35,6 +36,5 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
-    - assets/data/
 
   uses-material-design: true
