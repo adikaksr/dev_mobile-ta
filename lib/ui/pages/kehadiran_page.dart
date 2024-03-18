@@ -23,36 +23,25 @@ class KehadiranPage extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          flexibleSpace: Align(
-            alignment: Alignment.bottomLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: 15, bottom: 10),
-              child: Text(
-                "Kehadiran",
-                style: blackTextStyle.copyWith(
-                  fontSize: 18,
-                  fontWeight: medium,
-                ),
-              ),
+  Widget filePickerContainer(String title) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 20, top: 20),
+          child: Text(
+            title,
+            style: blackTextStyle.copyWith(
+              fontSize: 18,
+              fontWeight: medium,
             ),
           ),
-          backgroundColor: kWhiteColor,
-          elevation: 1,
         ),
-      ),
-      body: Center(
-        child: Stack(
+        Stack(
           children: [
             Container(
               width: double.infinity, // Set the width of the Container
-              height: 230, // Set the height of the Container
+              height: 200, // Set the height of the Container
               padding: EdgeInsets.all(10),
               margin: EdgeInsets.symmetric(horizontal: 20),
               decoration: BoxDecoration(
@@ -62,7 +51,7 @@ class KehadiranPage extends StatelessWidget {
             ),
             CustomPaint(
               size:
-                  Size(double.infinity, 230), // Set the size of the CustomPaint
+                  Size(double.infinity, 200), // Set the size of the CustomPaint
               painter: DashedBorderPainter(),
             ),
             Positioned(
@@ -87,7 +76,7 @@ class KehadiranPage extends StatelessWidget {
                         top: 5,
                       ), // Set the margin
                       child: Text(
-                        'Unggah bukti kehadiran disini',
+                        'Unggah bukti $title disini',
                         style: blackTextStyle.copyWith(
                           fontSize: 13,
                           fontWeight: medium,
@@ -117,6 +106,40 @@ class KehadiranPage extends StatelessWidget {
             ),
           ],
         ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(70),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          flexibleSpace: Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 15, bottom: 10),
+              child: Text(
+                "Kehadiran",
+                style: blackTextStyle.copyWith(
+                  fontSize: 18,
+                  fontWeight: medium,
+                ),
+              ),
+            ),
+          ),
+          backgroundColor: kWhiteColor,
+          elevation: 1,
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          filePickerContainer('Page 1'),
+          SizedBox(height: 20), // Add some space between the containers
+          filePickerContainer('Page 2'),
+        ],
       ),
     );
   }
