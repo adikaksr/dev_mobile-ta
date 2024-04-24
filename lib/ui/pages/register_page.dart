@@ -16,6 +16,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _npmController = TextEditingController();
+  String? _selectedRole;
 
   set _isLoading(bool _isLoading) {}
 
@@ -31,6 +33,29 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
+              DropdownButtonFormField<String>(
+                value: _selectedRole,
+                items: <String>['Mahasiswa', 'Dosen'].map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedRole = newValue;
+                  });
+                },
+                decoration: InputDecoration(
+                  labelText: 'Jenis Akun',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select a role';
+                  }
+                  return null;
+                },
+              ),
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(
@@ -42,6 +67,18 @@ class _RegisterPageState extends State<RegisterPage> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _npmController,
+                decoration: InputDecoration(
+                  labelText: 'NPM',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your NPM';
                   }
                   return null;
                 },

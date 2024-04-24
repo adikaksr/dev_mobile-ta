@@ -1,3 +1,4 @@
+import 'package:easkripsi/ui/pages/home_page.dart';
 import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_dropdown.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
@@ -165,60 +166,86 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       Widget loginButton() {
-        return CustomButton(
-          title: 'Masuk',
-          onPressed: () async {
-            setState(() {
-              _isLoading = true;
-            });
-            try {
-              final navigator = Navigator.of(context);
-              final _emailController = TextEditingController();
-              final email = _emailController.text;
-              final _passwordController = TextEditingController();
-              final password = _passwordController.text;
-              await _auth.signInWithEmailAndPassword(
-                  email: email, password: password);
-              // Replace 'path_to_chat_page.dart' with the actual file path
+        // return CustomButton(
+        //   title: 'Masuk',
+        //   onPressed: () async {
+        //     setState(() {
+        //       _isLoading = true;
+        //     });
+        //     try {
+        //       final navigator = Navigator.of(context);
+        //       final _emailController = TextEditingController();
+        //       final email = _emailController.text;
+        //       final _passwordController = TextEditingController();
+        //       final password = _passwordController.text;
+        //       await _auth.signInWithEmailAndPassword(
+        //           email: email, password: password);
+        //       // Replace 'path_to_chat_page.dart' with the actual file path
 
-              var ChatPage;
-              navigator.pushReplacementNamed(ChatPage.id);
+        //       var ChatPage;
+        //       navigator.pushReplacementNamed(ChatPage.id);
+        //     } catch (e) {
+        //       final snackbar = SnackBar(content: Text(e.toString()));
+        //       ScaffoldMessenger.of(context).showSnackBar(snackbar);
+        //     } finally {
+        //       setState(() {
+        //         _isLoading = false;
+        //       });
+        //     }
+        //   },
+        //   // onPressed: () {
+        //   //   if (_selectedRole == 'Pilih Login Sebagai') {
+        //   //     ScaffoldMessenger.of(context).showSnackBar(
+        //   //       SnackBar(content: Text('Mohon pilih user')),
+        //   //     );
+        //   //   } else if (_selectedRole == 'Mahasiswa') {
+        //   //     Navigator.push(
+        //   //       context,
+        //   //       MaterialPageRoute(builder: (context) => MainPage()),
+        //   //     );
+        //   //   } else if (_selectedRole == 'Dosen') {
+        //   //     Navigator.push(
+        //   //       context,
+        //   //       MaterialPageRoute(builder: (context) => MainPageDosen()),
+        //   //     );
+        //   //   } else if (_selectedRole == 'Koordinator TA') {
+        //   //     Navigator.push(
+        //   //       context,
+        //   //       MaterialPageRoute(builder: (context) => KoordinatorTAPage()),
+        //   //     );
+        //   //   } else if (_selectedRole == 'Operator') {
+        //   //     Navigator.push(
+        //   //       context,
+        //   //       MaterialPageRoute(builder: (context) => OperatorPage()),
+        //   //     );
+        //   //   }
+        //   // },
+        // );
+        ElevatedButton(
+          onPressed: () async {
+            try {
+              final _emailController = TextEditingController();
+              final _passwordController = TextEditingController();
+              final email = _emailController.text;
+              final password = _passwordController.text;
+
+              // Sign in the user
+              final userCredential =
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                email: email,
+                password: password,
+              );
+
+              // Navigate to the home page if the sign in was successful
+              if (userCredential.user != null) {
+                Navigator.pushReplacementNamed(context, '/home');
+              }
             } catch (e) {
-              final snackbar = SnackBar(content: Text(e.toString()));
-              ScaffoldMessenger.of(context).showSnackBar(snackbar);
-            } finally {
-              setState(() {
-                _isLoading = false;
-              });
+              // Handle the error
+              // ...
             }
           },
-          // onPressed: () {
-          //   if (_selectedRole == 'Pilih Login Sebagai') {
-          //     ScaffoldMessenger.of(context).showSnackBar(
-          //       SnackBar(content: Text('Mohon pilih user')),
-          //     );
-          //   } else if (_selectedRole == 'Mahasiswa') {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => MainPage()),
-          //     );
-          //   } else if (_selectedRole == 'Dosen') {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => MainPageDosen()),
-          //     );
-          //   } else if (_selectedRole == 'Koordinator TA') {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => KoordinatorTAPage()),
-          //     );
-          //   } else if (_selectedRole == 'Operator') {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => OperatorPage()),
-          //     );
-          //   }
-          // },
+          child: Text('Login'),
         );
       }
 
