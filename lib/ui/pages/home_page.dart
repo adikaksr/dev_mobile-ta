@@ -147,15 +147,63 @@ class HomePage extends StatelessWidget {
                 fontWeight: semiBold,
               ),
             ),
-            const DosenTile(
-              name: 'Viska Mutiawani B.IT, M.IT',
-              status: 'Pembimbing 1',
-              imageUrl: 'assets/Acatar.png',
+            ElevatedButton.icon(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Masukkan NIP'),
+                    content: TextFormField(
+                      decoration: InputDecoration(labelText: 'NIP'),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: Text('Cancel'),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      TextButton(
+                        child: Text('OK'),
+                        onPressed: () {
+                          bool _showDosenTile;
+                          setState(() => _showDosenTile = true);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: Icon(Icons.add),
+              label: Text('Tambah Dosen Pembimbing'),
             ),
-            const DosenTile(
-              name: 'Alim Misbullah S.Si., M.S',
-              status: 'Pembimbing 2',
-              imageUrl: 'assets/Acatar.png',
+            ElevatedButton.icon(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Masukkan NIP'),
+                    content: TextFormField(
+                      decoration: InputDecoration(labelText: 'NIP'),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: Text('Cancel'),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      TextButton(
+                        child: Text('OK'),
+                        onPressed: () {
+                          bool _showDosenTile;
+                          setState(() => _showDosenTile = true);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: Icon(Icons.add),
+              label: Text('Tambah Dosen Pembimbing'),
             ),
           ],
         ),
@@ -216,4 +264,6 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
+  void setState(bool Function() param0) {}
 }
