@@ -19,7 +19,11 @@ import 'ui/pages/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    print('Firebase initialization error: $e');
+  }
 
   runApp(const MyApp());
 }
@@ -42,7 +46,7 @@ class MyApp extends StatelessWidget {
           '/login-page': (context) => LoginPage(),
           '/main': (context) => const MainPage(),
           '/bimbingan': (context) => const BimbinganPage(),
-          '/home': (context) => const HomePage(),
+          '/home': (context) => HomePage(),
           '/jadwal': (context) => const JadwalPage(),
           '/kehadiran': (context) => const KehadiranPage(),
           '/form': (context) => FormPage(),

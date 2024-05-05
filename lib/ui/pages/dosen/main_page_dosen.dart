@@ -26,7 +26,7 @@ class MainPageDosen extends StatelessWidget {
         case 3:
           return const JadwalPage();
         default:
-          return const HomePage();
+          return HomePage();
       }
     }
 

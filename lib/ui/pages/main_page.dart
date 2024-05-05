@@ -4,6 +4,7 @@ import 'package:easkripsi/ui/pages/form_page.dart';
 import 'package:easkripsi/ui/pages/home_page.dart';
 import 'package:easkripsi/ui/pages/jadwal_page.dart';
 import 'package:easkripsi/ui/pages/kehadiran_page.dart';
+import 'package:easkripsi/ui/pages/pilih_seminar_page.dart';
 import 'package:easkripsi/ui/widgets/custom_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,17 +18,17 @@ class MainPage extends StatelessWidget {
     Widget buildContent(int currentIndex) {
       switch (currentIndex) {
         case 0:
-          return const HomePage();
+          return HomePage();
         case 1:
           return const FormPage();
         case 2:
           return const BimbinganPage();
         case 3:
-          return const JadwalPage();
+          return const PilihSeminarPage();
         case 4:
           return const KehadiranPage();
         default:
-          return const HomePage();
+          return HomePage();
       }
     }
 

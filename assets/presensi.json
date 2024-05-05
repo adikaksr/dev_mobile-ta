@@ -1,9 +1,41 @@
 [
   {
-    "date": "2024-02-26",
+    "date": "2024-05-02",
     "time": "08:00-10:00",
     "presensi": {
       "dosen": "Dosen 1 Informatika",
+      "status": "Present"
+    }
+  },
+  {
+    "date": "2024-05-02",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 2 Informatika",
+      "status": "Absent"
+    }
+  },
+  {
+    "date": "2024-05-02",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 3 Informatika",
+      "status": "Pending"
+    }
+  },
+  {
+    "date": "2024-05-02",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 4 Informatika",
+      "status": "Present"
+    }
+  },
+  {
+    "date": "2024-05-02",
+    "time": "08:00-10:00",
+    "presensi": {
+      "dosen": "Dosen 5 Informatika",
       "status": "Present"
     }
   },

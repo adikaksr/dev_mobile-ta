@@ -1,11 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easkripsi/ui/pages/akun_page.dart';
 import 'package:easkripsi/ui/pages/bimbingan_page.dart';
-import 'package:easkripsi/ui/widgets/dosen_tile.dart';
 import 'package:flutter/material.dart';
 import '../../shared/theme.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -147,63 +147,134 @@ class HomePage extends StatelessWidget {
                 fontWeight: semiBold,
               ),
             ),
-            ElevatedButton.icon(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Masukkan NIP'),
-                    content: TextFormField(
-                      decoration: InputDecoration(labelText: 'NIP'),
+            Container(
+              margin: EdgeInsets.only(top: 16),
+              height: 70,
+              width: 350,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: Colors.blue, // Set border color
+                  width: 2, // Set border width
+                ),
+              ),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Masukkan NIP'),
+                      content: TextFormField(
+                        decoration: InputDecoration(labelText: 'NIP'),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('Cancel'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            bool _showDosenTile;
+                            setState(() => _showDosenTile = true);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
                     ),
-                    actions: [
-                      TextButton(
-                        child: Text('Cancel'),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                      TextButton(
-                        child: Text('OK'),
-                        onPressed: () {
-                          bool _showDosenTile;
-                          setState(() => _showDosenTile = true);
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
+                  );
+                },
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.blue,
+                ),
+                label: Text(
+                  'Tambah Dosen Pembimbing 1',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
                   ),
-                );
-              },
-              icon: Icon(Icons.add),
-              label: Text('Tambah Dosen Pembimbing'),
+                ),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  elevation: MaterialStateProperty.all(0),
+                ),
+              ),
             ),
-            ElevatedButton.icon(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Masukkan NIP'),
-                    content: TextFormField(
-                      decoration: InputDecoration(labelText: 'NIP'),
+            Container(
+              margin: EdgeInsets.only(top: 16),
+              height: 70,
+              width: 350,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: Colors.blue, // Set border color
+                  width: 2, // Set border width
+                ),
+              ),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Masukkan NIP'),
+                      content: TextFormField(
+                        decoration: InputDecoration(labelText: 'NIP'),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('Cancel'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            void getDosen(String nimNip) async {
+                              var firestore;
+                              DocumentSnapshot document = await firestore
+                                  .collection('dosen')
+                                  .doc(nimNip)
+                                  .get();
+                              if (document.exists) {
+                                print('Dosen data: ${document.data()}');
+                              } else {
+                                print('No dosen found with nip: $nimNip');
+                              }
+                            }
+
+                            bool _showDosenTile;
+                            setState(() => _showDosenTile = true);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
                     ),
-                    actions: [
-                      TextButton(
-                        child: Text('Cancel'),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                      TextButton(
-                        child: Text('OK'),
-                        onPressed: () {
-                          bool _showDosenTile;
-                          setState(() => _showDosenTile = true);
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
+                  );
+                },
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.blue,
+                ),
+                label: Text(
+                  'Tambah Dosen Pembimbing 2',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
                   ),
-                );
-              },
-              icon: Icon(Icons.add),
-              label: Text('Tambah Dosen Pembimbing'),
+                ),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  elevation: MaterialStateProperty.all(0),
+                ),
+              ),
             ),
           ],
         ),
@@ -227,20 +298,179 @@ class HomePage extends StatelessWidget {
                 fontWeight: semiBold,
               ),
             ),
-            const DosenTile(
-              name: 'Dosen Penguji 1',
-              status: 'Penguji 1',
-              imageUrl: 'assets/Acatar.png',
+            Container(
+              margin: EdgeInsets.only(top: 16),
+              height: 70,
+              width: 350,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: Colors.blue, // Set border color
+                  width: 2, // Set border width
+                ),
+              ),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Masukkan NIP'),
+                      content: TextFormField(
+                        decoration: InputDecoration(labelText: 'NIP'),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('Cancel'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            bool _showDosenTile;
+                            setState(() => _showDosenTile = true);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.blue,
+                ),
+                label: Text(
+                  'Tambah Dosen Penguji 1',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                ),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  elevation: MaterialStateProperty.all(0),
+                ),
+              ),
             ),
-            const DosenTile(
-              name: 'Dosen Penguji 2',
-              status: 'Penguji 2',
-              imageUrl: 'assets/Acatar.png',
+            Container(
+              margin: EdgeInsets.only(top: 16),
+              height: 70,
+              width: 350,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: Colors.blue, // Set border color
+                  width: 2, // Set border width
+                ),
+              ),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Masukkan NIP'),
+                      content: TextFormField(
+                        decoration: InputDecoration(labelText: 'NIP'),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('Cancel'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            bool _showDosenTile;
+                            setState(() => _showDosenTile = true);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.blue,
+                ),
+                label: Text(
+                  'Tambah Dosen Penguj 2',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                ),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  elevation: MaterialStateProperty.all(0),
+                ),
+              ),
             ),
-            const DosenTile(
-              name: 'Dosen Penguji 3',
-              status: 'Penguji 3',
-              imageUrl: 'assets/Acatar.png',
+            Container(
+              margin: EdgeInsets.only(top: 16),
+              height: 70,
+              width: 350,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: Colors.blue, // Set border color
+                  width: 2, // Set border width
+                ),
+              ),
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Masukkan NIP'),
+                      content: TextFormField(
+                        decoration: InputDecoration(labelText: 'NIP'),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('Cancel'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            bool _showDosenTile;
+                            setState(() => _showDosenTile = true);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.blue,
+                ),
+                label: Text(
+                  'Tambah Dosen Penguj 3',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                ),
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  elevation: MaterialStateProperty.all(0),
+                ),
+              ),
             ),
             SizedBox(
               height: 100,
