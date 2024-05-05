@@ -11,6 +11,7 @@ class DosenTile extends StatelessWidget {
     required this.name,
     required this.status,
     required this.imageUrl,
+    required String nip,
   });
 
   @override
