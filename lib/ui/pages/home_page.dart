@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easkripsi/ui/pages/akun_page.dart';
 import 'package:easkripsi/ui/pages/bimbingan_page.dart';
 import 'package:easkripsi/ui/widgets/dosen_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../shared/theme.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,6 +27,25 @@ class Dosen {
 
 class _HomePageState extends State<HomePage> {
   Dosen? currentDosen;
+  final firestore = FirebaseFirestore.instance;
+  final storage = new FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    _readData();
+  }
+
+  Future<Map<String, dynamic>> _readData() async {
+    String value = await storage.read(key: 'user') ?? '{}';
+    try {
+      Map<String, dynamic> data = jsonDecode(value);
+      return data;
+    } catch (e) {
+      print('Error parsing JSON: $e');
+      return {};
+    }
+  }
 
   void getDosen(String nimNip) async {
     // Fetch the dosen data using the nip...
@@ -41,15 +63,32 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           children: [
             Expanded(
-              child: Container(
-                child: Text(
-                  'Hello,\nAdika Nuraga Kanaka Stamba Rucira',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 24,
-                    fontWeight: semiBold,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
+              child: FutureBuilder<Map<String, dynamic>>(
+                future: _readData(), // Read the data from secure storage
+                builder: (BuildContext context,
+                    AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error.toString()}');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(); // Show a loading spinner while waiting for the data
+                  }
+
+                  Map<String, dynamic> data = snapshot.data ?? {};
+                  String name = data['name'] ?? 'No name';
+
+                  return Container(
+                    child: Text(
+                      'Hello,\n$name',
+                      style: blackTextStyle.copyWith(
+                        fontSize: 24,
+                        fontWeight: semiBold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                },
               ),
             ),
             GestureDetector(
@@ -204,7 +243,7 @@ class _HomePageState extends State<HomePage> {
                                 TextButton(
                                   child: Text('OK'),
                                   onPressed: () {
-                                    final query = FirebaseFirestore.instance
+                                    final query = firestore
                                         .collection('Dosen')
                                         .where('nimNip', isEqualTo: nimNip);
                                     query

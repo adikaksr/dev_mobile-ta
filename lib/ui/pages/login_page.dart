@@ -47,15 +47,16 @@ class _LoginPageState extends State<LoginPage> {
 
       // Hide the loading indicator
       _scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
-
-      if (data && role == 'Mahasiswa') {
-        Navigator.pushReplacementNamed(context, '/main');
-      } else if (data && role == 'Dosen') {
-        Navigator.pushReplacementNamed(context, '/main-dosen');
-      } else if (data && role == 'Koordinator TA') {
-        Navigator.pushReplacementNamed(context, '/main-koorta');
-      } else if (data && role == 'Operator') {
-        Navigator.pushReplacementNamed(context, '/main-operator');
+      if (data) {
+        if (role == 'Mahasiswa') {
+          Navigator.pushReplacementNamed(context, '/main');
+        } else if (role == 'Dosen') {
+          Navigator.pushReplacementNamed(context, '/main-dosen');
+        } else if (role == 'Koordinator TA') {
+          Navigator.pushReplacementNamed(context, '/main-koorta');
+        } else if (role == 'Operator') {
+          Navigator.pushReplacementNamed(context, '/main-operator');
+        }
       } else {
         // Show an error message
         Get.snackbar('Error', 'Failed to login');

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import '../../shared/theme.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -13,10 +14,23 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushNamed(context, '/login-page');
-    });
     super.initState();
+    _navigateUser();
+  }
+
+  void _navigateUser() async {
+    final storage = FlutterSecureStorage();
+    String? isLoggedIn = await storage.read(key: 'user');
+
+    if (isLoggedIn != null && isLoggedIn.isNotEmpty) {
+      Timer(Duration(seconds: 3), () {
+        Navigator.pushReplacementNamed(context, '/main');
+      });
+    } else {
+      Timer(Duration(seconds: 3), () {
+        Navigator.pushNamed(context, '/login-page');
+      });
+    }
   }
 
   @override
