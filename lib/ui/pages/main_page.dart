@@ -5,6 +5,7 @@ import 'package:easkripsi/ui/pages/home_page.dart';
 import 'package:easkripsi/ui/pages/jadwal_page.dart';
 import 'package:easkripsi/ui/pages/kehadiran_page.dart';
 import 'package:easkripsi/ui/pages/pilih_seminar_page.dart';
+import 'package:easkripsi/ui/pages/test_data.dart';
 import 'package:easkripsi/ui/widgets/custom_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,4 +1,5 @@
 import 'package:easkripsi/cubit/page_cubit.dart';
+import 'package:easkripsi/firebase_options.dart';
 import 'package:easkripsi/ui/pages/bimbingan_page.dart';
 import 'package:easkripsi/ui/pages/chat_room_page.dart';
 import 'package:easkripsi/ui/pages/dosen/main_page_dosen.dart';
@@ -19,11 +20,9 @@ import 'ui/pages/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await Firebase.initializeApp();
-  } catch (e) {
-    print('Firebase initialization error: $e');
-  }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(const MyApp());
 }

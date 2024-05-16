@@ -7,6 +7,7 @@ import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_dropdown.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../controller/login_controller.dart';
 import '../../shared/theme.dart';
 
@@ -18,7 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String? _selectedRole;
+  String? role;
   LoginController loginController = LoginController();
   final idInput = TextEditingController();
   final passwordInput = TextEditingController();
@@ -42,25 +43,23 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     try {
-      String role =
-          await loginController.login(nimNip, password, _selectedRole!);
+      bool data = await loginController.login(nimNip, password, role!);
 
       // Hide the loading indicator
       _scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
 
-      if (role == 'Mahasiswa') {
+      if (data && role == 'Mahasiswa') {
         Navigator.pushReplacementNamed(context, '/main');
-      } else if (role == 'Dosen') {
+      } else if (data && role == 'Dosen') {
         Navigator.pushReplacementNamed(context, '/main-dosen');
-      } else if (role == 'Koordinator TA') {
+      } else if (data && role == 'Koordinator TA') {
         Navigator.pushReplacementNamed(context, '/main-koorta');
-      } else if (role == 'Operator') {
+      } else if (data && role == 'Operator') {
         Navigator.pushReplacementNamed(context, '/main-operator');
       } else {
         // Show an error message
-        _scaffoldMessengerKey.currentState?.showSnackBar(
-          SnackBar(content: Text('Failed to login')),
-        );
+        Get.snackbar('Error', 'Failed to login');
+        throw Exception('Failed to login');
       }
     } catch (error) {
       // Hide the loading indicator
@@ -140,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
         items: ['Mahasiswa', 'Dosen', 'Koordinator TA', 'Operator'],
         onChanged: (value) {
           setState(() {
-            _selectedRole = value;
+            role = value;
           });
         },
       );
@@ -168,33 +167,6 @@ class _LoginPageState extends State<LoginPage> {
         return CustomButton(
           title: 'Masuk',
           onPressed: handleLogin,
-          // onPressed: () {
-          //   if (_selectedRole == 'Pilih Login Sebagai') {
-          //     ScaffoldMessenger.of(context).showSnackBar(
-          //       SnackBar(content: Text('Mohon pilih user')),
-          //     );
-          //   } else if (_selectedRole == 'Mahasiswa') {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => MainPage()),
-          //     );
-          //   } else if (_selectedRole == 'Dosen') {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => MainPageDosen()),
-          //     );
-          //   } else if (_selectedRole == 'Koordinator TA') {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => KoordinatorTAPage()),
-          //     );
-          //   } else if (_selectedRole == 'Operator') {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => OperatorPage()),
-          //     );
-          //   }
-          // },
         );
       }
 

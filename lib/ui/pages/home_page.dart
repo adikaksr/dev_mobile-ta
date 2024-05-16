@@ -12,10 +12,20 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  String? userNip;
+class Dosen {
+  final String nimNip;
+  final String name;
 
-  void getDosen(String nip) async {
+  Dosen({
+    required this.nimNip,
+    required this.name,
+  });
+}
+
+class _HomePageState extends State<HomePage> {
+  Dosen? currentDosen;
+
+  void getDosen(String nimNip) async {
     // Fetch the dosen data using the nip...
   }
 
@@ -159,7 +169,7 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: semiBold,
               ),
             ),
-            userNip == null
+            currentDosen == null
                 ? Container(
                     margin: EdgeInsets.only(top: 16),
                     height: 70,
@@ -176,13 +186,14 @@ class _HomePageState extends State<HomePage> {
                         showDialog(
                           context: context,
                           builder: (context) {
-                            String nip = '';
+                            String nimNip = '';
                             return AlertDialog(
                               title: Text('Masukkan NIP'),
                               content: TextFormField(
                                 decoration: InputDecoration(labelText: 'NIP'),
                                 onChanged: (value) {
-                                  nip = 'value';
+                                  nimNip = value;
+                                  print(nimNip);
                                 },
                               ),
                               actions: [
@@ -193,9 +204,30 @@ class _HomePageState extends State<HomePage> {
                                 TextButton(
                                   child: Text('OK'),
                                   onPressed: () {
-                                    getDosen(nip);
-                                    setState(() {
-                                      userNip = nip;
+                                    final query = FirebaseFirestore.instance
+                                        .collection('Dosen')
+                                        .where('nimNip', isEqualTo: nimNip);
+                                    query
+                                        .get()
+                                        .then((QuerySnapshot querySnapshot) {
+                                      querySnapshot.docs.forEach((doc) {
+                                        final data = doc.data() as Map<String,
+                                            dynamic>; // Get data from doc
+                                        setState(() {
+                                          currentDosen = Dosen(
+                                            nimNip: data['nimNip'],
+                                            name: data['name'],
+                                          );
+                                        });
+
+                                        // final nip = data['nip'];
+                                        // final name = data['name'];
+                                        // print(data);
+                                        // print(nip);
+                                        // print(name);
+                                      });
+                                    }).catchError((error) {
+                                      print(error);
                                     });
                                     Navigator.of(context).pop();
                                   },
@@ -218,8 +250,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ))
                 : DosenTile(
-                    nip: userNip!,
-                    name: 'Viska',
+                    nip: currentDosen!.nimNip,
+                    name: currentDosen!.name,
                     status: 'Pembimbing 1',
                     imageUrl: 'assets/Acatar.png',
                   ),
