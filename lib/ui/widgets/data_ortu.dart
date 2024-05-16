@@ -1,8 +1,40 @@
+import 'dart:convert';
+
 import 'package:easkripsi/shared/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class DataOrtu extends StatelessWidget {
+class DataOrtu extends StatefulWidget {
   const DataOrtu({Key? key}) : super(key: key);
+
+  @override
+  State<DataOrtu> createState() => _DataOrtuState();
+}
+
+class _DataOrtuState extends State<DataOrtu> {
+  final storage = FlutterSecureStorage();
+  Map<String, dynamic> userData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _readData().then((data) {
+      setState(() {
+        userData = data;
+      });
+    });
+  }
+
+  Future<Map<String, dynamic>> _readData() async {
+    String value = await storage.read(key: 'user') ?? '{}';
+    try {
+      Map<String, dynamic> data = jsonDecode(value);
+      return data;
+    } catch (e) {
+      print('Error parsing JSON: $e');
+      return {};
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +65,7 @@ class DataOrtu extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Viverra aliquet",
+                      userData['nama_ayah'] ?? 'Unknown Nama Ayah',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -62,7 +94,7 @@ class DataOrtu extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Urna hendrerit",
+                      userData['nama_ibu'] ?? 'Unknown Nama Ibu',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -91,7 +123,7 @@ class DataOrtu extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Banda Aceh",
+                      userData['alamat_ortu'] ?? 'Unknown Alamat Orangtua',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -120,7 +152,7 @@ class DataOrtu extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Hidup",
+                      userData['status_h_ayah'] ?? 'Unknown Status Hidup Ayah',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -149,7 +181,7 @@ class DataOrtu extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Hidup",
+                      userData['status_h_ibu'] ?? 'Unknown Status Hidup Ibu',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -178,7 +210,7 @@ class DataOrtu extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "S1-Sarjana",
+                      userData['pend_ayah'] ?? 'Unknown Pendidikan Ayah',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -207,7 +239,7 @@ class DataOrtu extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "S2-Magister",
+                      userData['pend_ibu'] ?? 'Unknown Pendidikan Ibu',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -236,7 +268,7 @@ class DataOrtu extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "082210101010",
+                      userData['hp_ayah'] ?? 'Unknown Nomor HP Ayah',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -265,7 +297,7 @@ class DataOrtu extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "082210101010",
+                      userData['hp_ibu'] ?? 'Unknown Nomor HP Ibu',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -298,7 +330,7 @@ class DataOrtu extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        "082210101010",
+                        userData['hp_wali'] ?? 'Unknown Nomor HP Wali',
                         textAlign: TextAlign.end,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

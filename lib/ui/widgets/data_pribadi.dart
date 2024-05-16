@@ -1,8 +1,40 @@
+import 'dart:convert';
+
 import 'package:easkripsi/shared/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class DataPribadi extends StatelessWidget {
-  const DataPribadi({Key? key}) : super(key: key);
+class DataPribadi extends StatefulWidget {
+  DataPribadi({Key? key}) : super(key: key);
+
+  @override
+  State<DataPribadi> createState() => _DataPribadiState();
+}
+
+class _DataPribadiState extends State<DataPribadi> {
+  final storage = FlutterSecureStorage();
+  Map<String, dynamic> userData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _readData().then((data) {
+      setState(() {
+        userData = data;
+      });
+    });
+  }
+
+  Future<Map<String, dynamic>> _readData() async {
+    String value = await storage.read(key: 'user') ?? '{}';
+    try {
+      Map<String, dynamic> data = jsonDecode(value);
+      return data;
+    } catch (e) {
+      print('Error parsing JSON: $e');
+      return {};
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +65,7 @@ class DataPribadi extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "1808107010056",
+                      userData['nimNip'] ?? 'Unknown NIM',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -62,7 +94,7 @@ class DataPribadi extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "082210101010",
+                      userData['telepon'] ?? 'Unknown Telepon',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -91,7 +123,7 @@ class DataPribadi extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Laki-Laki",
+                      userData['jk'] ?? 'Unknown Jenis Kelamin',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -120,7 +152,7 @@ class DataPribadi extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Banda Aceh",
+                      userData['tempat_lahir'] ?? 'Unknown Tempat Lahir',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -149,7 +181,7 @@ class DataPribadi extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "1 Januari 2000",
+                      userData['tanggal_lahir'] ?? 'Unknown Tanggal Lahir',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -178,7 +210,7 @@ class DataPribadi extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Islam",
+                      userData['agama'] ?? 'Unknown Agama',
                       style: TextStyle(
                         color: kBlackColor,
                         fontFamily: 'Public Sans',
@@ -211,7 +243,7 @@ class DataPribadi extends StatelessWidget {
                     ),
                     Expanded(
                       child: Text(
-                        "Desa Blang Krueng",
+                        userData['alamat'] ?? 'Unknown Alamat',
                         textAlign: TextAlign.end,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,

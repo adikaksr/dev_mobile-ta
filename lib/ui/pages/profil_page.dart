@@ -2,9 +2,40 @@ import 'package:easkripsi/shared/theme.dart';
 import 'package:flutter/material.dart';
 import '../widgets/data_ortu.dart';
 import '../widgets/data_pribadi.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert';
 
-class ProfilPage extends StatelessWidget {
+class ProfilPage extends StatefulWidget {
   ProfilPage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilPage> createState() => _ProfilPageState();
+}
+
+class _ProfilPageState extends State<ProfilPage> {
+  final storage = FlutterSecureStorage();
+  Map<String, dynamic> userData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _readData().then((data) {
+      setState(() {
+        userData = data;
+      });
+    });
+  }
+
+  Future<Map<String, dynamic>> _readData() async {
+    String value = await storage.read(key: 'user') ?? '{}';
+    try {
+      Map<String, dynamic> data = jsonDecode(value);
+      return data;
+    } catch (e) {
+      print('Error parsing JSON: $e');
+      return {};
+    }
+  }
 
   final List<Widget> myTab = [
     Tab(child: Text("Data Pribadi", style: TextStyle(color: Colors.white))),
@@ -69,12 +100,13 @@ class ProfilPage extends StatelessWidget {
                         backgroundColor: Colors.white,
                         child: CircleAvatar(
                           radius: 55,
+                          backgroundImage: AssetImage('assets/Acatar.png'),
                         ),
                       ),
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(top: 8),
                         child: Text(
-                          "Adika Nuraga Kanaka Stamba Rucira",
+                          userData['name'] ?? 'Unknown Name',
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Public Sans',
@@ -101,10 +133,10 @@ class ProfilPage extends StatelessWidget {
                                 color: Color(0xFF3194F1),
                               ),
                             ),
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.only(left: 10),
                               child: Text(
-                                "nuraga@mhs.usk.ac.id",
+                                userData['email'] ?? 'Unknown Email',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Poppins',
@@ -137,7 +169,7 @@ class ProfilPage extends StatelessWidget {
             ),
           ),
         ),
-        body: const Padding(
+        body: Padding(
           padding: EdgeInsets.all(20),
           child: TabBarView(
             children: [

@@ -111,6 +111,7 @@ class AkunPage extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 22,
+                              backgroundImage: AssetImage('assets/Acatar.png'),
                             ),
                             Expanded(
                               // Add this line
