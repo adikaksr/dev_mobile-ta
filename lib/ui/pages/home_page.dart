@@ -29,11 +29,48 @@ class _HomePageState extends State<HomePage> {
   Dosen? currentDosen;
   final firestore = FirebaseFirestore.instance;
   final storage = new FlutterSecureStorage();
+  Map<String, dynamic> userData = {};
 
   @override
   void initState() {
     super.initState();
-    _readData();
+    _readData().then((data) {
+      _readDospem1(data['nimNip']).then((data) {
+        print(data['nimNip']);
+        setState(() {
+          if (data.isNotEmpty) {
+            currentDosen = Dosen(
+              nimNip: data['nimNip'],
+              name: data['name'],
+            );
+          }
+        });
+      });
+      setState(() {
+        userData = data;
+      });
+    });
+  }
+
+  Future<Map<String, dynamic>> _readDospem1(String mahasiswaNim) async {
+    QuerySnapshot querySnapshot = await firestore
+        .collection('Mahasiswa')
+        .where('nimNip', isEqualTo: mahasiswaNim)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      if (data.containsKey('dospem_1')) {
+        print('okegas');
+        return data['dospem_1'] as Map<String, dynamic>;
+      } else {
+        print('dospem_1 does not exist');
+        return {};
+      }
+    } else {
+      print('Document does not exist');
+      return {};
+    }
   }
 
   Future<Map<String, dynamic>> _readData() async {
@@ -259,11 +296,37 @@ class _HomePageState extends State<HomePage> {
                                           );
                                         });
 
-                                        // final nip = data['nip'];
-                                        // final name = data['name'];
-                                        // print(data);
-                                        // print(nip);
-                                        // print(name);
+                                        // Get the currently logged in Mahasiswa's nim
+                                        final mahasiswaNim =
+                                            userData['nimNip'] ?? 'Unknown Nim';
+
+                                        print('mahasiswaNim' + mahasiswaNim);
+
+                                        firestore
+                                            .collection('Mahasiswa')
+                                            .where('nimNip',
+                                                isEqualTo: mahasiswaNim)
+                                            .get()
+                                            .then(
+                                                (QuerySnapshot querySnapshot) {
+                                          querySnapshot.docs.forEach((doc) {
+                                            doc.reference.update({
+                                              'dospem_1': {
+                                                'name': data['name'],
+                                                'nimNip': data['nimNip'],
+                                                'status': false,
+                                              },
+                                              // Update other fields as needed
+                                            }).then((_) {
+                                              print("Dosen Pembimbing Updated");
+                                            }).catchError((error) {
+                                              print(
+                                                  "Failed to update Dosen Pembimbing: $error");
+                                            });
+                                          });
+                                        }).catchError((error) {
+                                          print(error);
+                                        });
                                       });
                                     }).catchError((error) {
                                       print(error);
@@ -304,6 +367,8 @@ class _HomePageState extends State<HomePage> {
                     status: 'Pembimbing 1',
                     imageUrl: 'assets/Acatar.png',
                   ),
+
+            // DOSPEM 2
             Container(
               margin: EdgeInsets.only(top: 16),
               height: 70,
