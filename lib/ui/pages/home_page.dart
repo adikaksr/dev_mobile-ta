@@ -287,7 +287,17 @@ class _HomePageState extends State<HomePage> {
                           fontWeight: medium,
                         ),
                       ),
-                    ))
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                        elevation: MaterialStateProperty.all(0),
+                      ),
+                    ),
+                  )
                 : DosenTile(
                     nip: currentDosen!.nimNip,
                     name: currentDosen!.name,
