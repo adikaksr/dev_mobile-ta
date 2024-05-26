@@ -61,7 +61,6 @@ class _HomePageState extends State<HomePage> {
       DocumentSnapshot doc = querySnapshot.docs.first;
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       if (data.containsKey('dospem_1')) {
-        print('okegas');
         return data['dospem_1'] as Map<String, dynamic>;
       } else {
         print('dospem_1 does not exist');
@@ -322,6 +321,73 @@ class _HomePageState extends State<HomePage> {
                                             }).catchError((error) {
                                               print(
                                                   "Failed to update Dosen Pembimbing: $error");
+                                            });
+
+                                            final dosenId =
+                                                doc.id; // Store the document ID
+
+                                            // Create a new chat document with the mahasiswa and dosen as participants
+                                            firestore.collection('chats').add({
+                                              'connections': [
+                                                mahasiswaNim,
+                                                data['nimNip']
+                                              ],
+                                            }).then((docRef) {
+                                              print(
+                                                  "Chat created with ID: ${docRef.id}");
+
+                                              // Create a new chat document in the 'chats' subcollection of the Mahasiswa document
+                                              doc.reference
+                                                  .collection('chats')
+                                                  .doc(docRef.id)
+                                                  .set({
+                                                'connection': data['nimNip'],
+                                                'lastTime': DateTime.now()
+                                                    .toIso8601String(),
+                                                'total_unread': 0,
+                                              }).then((_) {
+                                                print(
+                                                    "Chat created in Mahasiswa's chats with ID: ${docRef.id}");
+                                              }).catchError((error) {
+                                                print(
+                                                    "Failed to create chat in Mahasiswa's chats: $error");
+                                              });
+
+                                              // // Create a new chat document in the 'chats' subcollection of the Dosen document
+                                              firestore
+                                                  .collection('Dosen')
+                                                  .where('nimNip',
+                                                      isEqualTo: data['nimNip'])
+                                                  .get()
+                                                  .then((QuerySnapshot
+                                                      querySnapshot) {
+                                                querySnapshot.docs
+                                                    .forEach((dosenDoc) {
+                                                  // Create a new chat document in the 'chats' subcollection of the Dosen document
+                                                  dosenDoc.reference
+                                                      .collection('chats')
+                                                      .doc(docRef.id)
+                                                      .set({
+                                                    'connection':
+                                                        mahasiswaNim, // Store the Mahasiswa's nim
+                                                    'lastTime': DateTime.now()
+                                                        .toIso8601String(),
+                                                    'total_unread': 0,
+                                                  }).then((_) {
+                                                    print(
+                                                        "Chat created in Dosen's chats with ID: ${docRef.id}");
+                                                  }).catchError((error) {
+                                                    print(
+                                                        "Failed to create chat in Dosen's chats: $error");
+                                                  });
+                                                });
+                                              }).catchError((error) {
+                                                print(
+                                                    "Failed to find Dosen: $error");
+                                              });
+                                            }).catchError((error) {
+                                              print(
+                                                  "Failed to create chat: $error");
                                             });
                                           });
                                         }).catchError((error) {
