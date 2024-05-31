@@ -35,6 +35,7 @@ class LoginController {
     }
   }
 
+//LOGOUT
   Future<void> logout() async {
     await storage.delete(key: 'user');
   }
