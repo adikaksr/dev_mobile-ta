@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easkripsi/shared/theme.dart';
 import 'package:easkripsi/ui/pages/chat_room_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class BimbinganPage extends StatefulWidget {
   const BimbinganPage({Key? key}) : super(key: key);
@@ -12,33 +16,88 @@ class BimbinganPage extends StatefulWidget {
 
 class _BimbinganPageState extends State<BimbinganPage> {
   final firestore = FirebaseFirestore.instance;
+  final storage = new FlutterSecureStorage();
+  Map<String, dynamic> userData = {};
+
+  // late StreamSubscription<List<QuerySnapshot>> _chatsSubscription;
+  List<Map<String, dynamic>> _chatData = [];
 
   @override
   void initState() {
     super.initState();
-    // Refresh the page here
+    _readData().then((data) {
+      print(' apa ni dapat data?: $data');
+      setState(() {
+        userData = data;
+      });
+    });
+
+    // _chatsSubscription = getChatsData(userData['nimNip'])
+    //     .listen((List<QuerySnapshot> snapshots) {
+    //   snapshots.forEach((snapshot) {
+    //     snapshot.docs.forEach((doc) {
+    //       print(doc.data());
+    //     });
+    //   });
+    // });
   }
 
-  Future<DocumentSnapshot> getDosenData() async {
-    // Replace 'yourChatId' with the actual chat ID
-    final chatDoc = await firestore.collection('chats').doc('yourChatId').get();
-    final dosenNimNip = chatDoc.data()?['connections'][
-        1]; // Assuming the Dosen's nimNip is the second item in the 'connections' array
+  @override
+  void dispose() {
+    // _chatsSubscription?.cancel();
+    super.dispose();
+  }
 
-    // Fetch the Dosen data
-    final querySnapshot = await firestore
-        .collection('Dosen')
-        .where('nimNip', isEqualTo: dosenNimNip)
-        .get();
-
-    if (querySnapshot.docs.isEmpty) {
-      // Handle the case where the query didn't match any documents
-      // For example, you could throw an error or return null
-      throw Exception('No matching Dosen found');
+  Future<Map<String, dynamic>> _readData() async {
+    String value = await storage.read(key: 'user') ?? '{}';
+    try {
+      Map<String, dynamic> data = jsonDecode(value);
+      return data;
+    } catch (e) {
+      print('Error parsing JSON: $e');
+      return {};
     }
-
-    return querySnapshot.docs.first;
   }
+
+  Stream<List<QuerySnapshot>> getChatsData(String nim) async* {
+    try {
+      // Replace 'yourMahasiswaId' with the actual Mahasiswa ID
+      QuerySnapshot mahasiswaSnapshot = await firestore
+          .collection('Mahasiswa')
+          .where('nimNip', isEqualTo: nim)
+          .get();
+
+      for (var doc in mahasiswaSnapshot.docs) {
+        yield* doc.reference
+            .collection('chats')
+            .snapshots()
+            .map((snapshot) => [snapshot]);
+      }
+    } catch (e) {
+      print('Failed to get chats data: $e');
+    }
+  }
+
+  // Future<DocumentSnapshot> getDosenData() async {
+  //   // Replace 'yourChatId' with the actual chat ID
+  //   final chatDoc = await firestore.collection('chats').doc('yourChatId').get();
+  //   final dosenNimNip = chatDoc.data()?['connections'][
+  //       1]; // Assuming the Dosen's nimNip is the second item in the 'connections' array
+
+  //   // Fetch the Dosen data
+  //   final querySnapshot = await firestore
+  //       .collection('Dosen')
+  //       .where('nimNip', isEqualTo: dosenNimNip)
+  //       .get();
+
+  //   if (querySnapshot.docs.isEmpty) {
+  //     // Handle the case where the query didn't match any documents
+  //     // For example, you could throw an error or return null
+  //     throw Exception('No matching Dosen found');
+  //   }
+
+  //   return querySnapshot.docs.first;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +123,12 @@ class _BimbinganPageState extends State<BimbinganPage> {
           elevation: 1,
         ),
       ),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: getDosenData(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: StreamBuilder<List<QuerySnapshot>>(
+        stream: getChatsData('1808107010056'),
+        builder: (BuildContext context,
+            AsyncSnapshot<List<QuerySnapshot>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            print('dapat userData: $userData');
             return Center(
                 child:
                     CircularProgressIndicator()); // Show a loading spinner while waiting
@@ -76,193 +136,60 @@ class _BimbinganPageState extends State<BimbinganPage> {
             return Text(
                 "Error: ${snapshot.error}"); // Show an error message if something went wrong
           } else {
-            final dosenData = snapshot.data?.data() as Map<String, dynamic>;
-            return ListTile(
-              title: Text(dosenData != null && dosenData.containsKey('name')
-                  ? dosenData['name']
-                  : 'No name'), // Replace 'name' with the actual field name for the Dosen's name
-              subtitle: Text(
-                "Gimana progressnya?",
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              leading: CircleAvatar(
-                radius: 23,
-                backgroundImage: AssetImage('assets/image_avatar.png'),
-              ),
-              trailing: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("10min"),
-                  Container(
-                    margin: EdgeInsets.only(top: 5),
-                    height: 20,
-                    width: 20,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.green,
-                    ),
-                    child: Center(
-                      child: Text("1",
-                          style: TextStyle(
-                            color: Colors.white,
-                          )),
-                    ),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChatRoomPage()),
-                );
+            print('ini apa snapshot data: ${snapshot.data}');
+            return ListView.builder(
+              itemCount: 0,
+              itemBuilder: (context, index) {
+                // final chat =
+                //     snapshot.data.docs[index].data() as Map<String, dynamic>;
+                // return ListTile(
+                //   title: Text(chat['username']),
+                //   subtitle: Text(chat['message']),
+                // );
               },
             );
+            // return ListTile(
+            //   title: Text('hadi'),
+            //   subtitle: Text(
+            //     "Gimana progressnya?",
+            //     maxLines: 1,
+            //     overflow: TextOverflow.ellipsis,
+            //   ),
+            //   leading: CircleAvatar(
+            //     radius: 23,
+            //     backgroundImage: AssetImage('assets/image_avatar.png'),
+            //   ),
+            //   trailing: Column(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Text("10min"),
+            //       Container(
+            //         margin: EdgeInsets.only(top: 5),
+            //         height: 20,
+            //         width: 20,
+            //         decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(10),
+            //           color: Colors.green,
+            //         ),
+            //         child: Center(
+            //           child: Text("1",
+            //               style: TextStyle(
+            //                 color: Colors.white,
+            //               )),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (context) => ChatRoomPage()),
+            //     );
+            //   },
+            // );
           }
         },
       ),
-      // ListView(
-      //   children: [
-      //     InkWell(
-      //       onTap: () {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //               builder: (context) =>
-      //                   ChatRoomPage()), // Replace with your ChatRoomPage
-      //         );
-      //       },
-      //       child: ListTile(
-      //         title: const Text("Dosen 1 Informatika"),
-      //         subtitle: const Text(
-      //           "Gimana progressnya?",
-      //           maxLines: 1,
-      //           overflow: TextOverflow.ellipsis,
-      //         ),
-      //         leading: const CircleAvatar(
-      //           radius: 23,
-      //         ),
-      //         trailing: Column(
-      //           mainAxisAlignment: MainAxisAlignment.center,
-      //           children: [
-      //             const Text("10min"),
-      //             Container(
-      //               margin: const EdgeInsets.only(top: 5),
-      //               height: 20,
-      //               width: 20,
-      //               decoration: BoxDecoration(
-      //                 borderRadius: BorderRadius.circular(10),
-      //                 color: Colors.green,
-      //               ),
-      //               child: const Center(
-      //                 child: Text("1",
-      //                     style: TextStyle(
-      //                       color: Colors.white,
-      //                     )),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //     Divider(
-      //       color: kGreyColor,
-      //       thickness: 1,
-      //     ),
-      //     InkWell(
-      //       onTap: () {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //               builder: (context) =>
-      //                   ChatRoomPage()), // Replace with your ChatRoomPage
-      //         );
-      //       },
-      //       child: ListTile(
-      //         title: const Text("Dosen 2 Informatika"),
-      //         subtitle: const Text(
-      //           "Boleh",
-      //           maxLines: 1,
-      //           overflow: TextOverflow.ellipsis,
-      //         ),
-      //         leading: const CircleAvatar(
-      //           radius: 23,
-      //         ),
-      //         trailing: Column(
-      //           mainAxisAlignment: MainAxisAlignment.center,
-      //           children: [
-      //             const Text("30min"),
-      //             Container(
-      //               margin: const EdgeInsets.only(top: 5),
-      //               height: 20,
-      //               width: 20,
-      //               decoration: BoxDecoration(
-      //                 borderRadius: BorderRadius.circular(10),
-      //                 color: Colors.green,
-      //               ),
-      //               child: const Center(
-      //                 child: Text("3",
-      //                     style: TextStyle(
-      //                       color: Colors.white,
-      //                     )),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //     Divider(
-      //       color: kGreyColor,
-      //       thickness: 1,
-      //     ),
-      //     InkWell(
-      //       onTap: () {
-      //         Navigator.push(
-      //           context,
-      //           MaterialPageRoute(
-      //               builder: (context) =>
-      //                   ChatRoomPage()), // Replace with your ChatRoomPage
-      //         );
-      //       },
-      //       child: ListTile(
-      //         title: const Text("Koordinator TA"),
-      //         subtitle: const Text(
-      //           "Berkas sudah diperiksa",
-      //           maxLines: 1,
-      //           overflow: TextOverflow.ellipsis,
-      //         ),
-      //         leading: const CircleAvatar(
-      //           radius: 23,
-      //         ),
-      //         trailing: Column(
-      //           mainAxisAlignment: MainAxisAlignment.center,
-      //           children: [
-      //             const Text("1jam"),
-      //             Container(
-      //               margin: const EdgeInsets.only(top: 5),
-      //               height: 20,
-      //               width: 20,
-      //               decoration: BoxDecoration(
-      //                 borderRadius: BorderRadius.circular(10),
-      //                 color: Colors.green,
-      //               ),
-      //               child: const Center(
-      //                 child: Text("3",
-      //                     style: TextStyle(
-      //                       color: Colors.white,
-      //                     )),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //     Divider(
-      //       color: kGreyColor,
-      //       thickness: 1,
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

@@ -27,6 +27,7 @@ class Dosen {
 
 class _HomePageState extends State<HomePage> {
   Dosen? currentDosen;
+  Dosen? currentDosen2;
   final firestore = FirebaseFirestore.instance;
   final storage = new FlutterSecureStorage();
   Map<String, dynamic> userData = {};
@@ -40,6 +41,17 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           if (data.isNotEmpty) {
             currentDosen = Dosen(
+              nimNip: data['nimNip'],
+              name: data['name'],
+            );
+          }
+        });
+      });
+      _readDospem2(data['nimNip']).then((data) {
+        print(data['nimNip']);
+        setState(() {
+          if (data.isNotEmpty) {
+            currentDosen2 = Dosen(
               nimNip: data['nimNip'],
               name: data['name'],
             );
@@ -64,6 +76,26 @@ class _HomePageState extends State<HomePage> {
         return data['dospem_1'] as Map<String, dynamic>;
       } else {
         print('dospem_1 does not exist');
+        return {};
+      }
+    } else {
+      print('Document does not exist');
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> _readDospem2(String mahasiswaNim) async {
+    QuerySnapshot querySnapshot = await firestore
+        .collection('Mahasiswa')
+        .where('nimNip', isEqualTo: mahasiswaNim)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      if (data.containsKey('dospem_2')) {
+        return data['dospem_2'] as Map<String, dynamic>;
+      } else {
+        print('dospem_2 does not exist');
         return {};
       }
     } else {
@@ -435,77 +467,266 @@ class _HomePageState extends State<HomePage> {
                   ),
 
             // DOSPEM 2
-            Container(
-              margin: EdgeInsets.only(top: 16),
-              height: 70,
-              width: 350,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: Colors.blue, // Set border color
-                  width: 2, // Set border width
-                ),
-              ),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Masukkan NIP'),
-                      content: TextFormField(
-                        decoration: InputDecoration(labelText: 'NIP'),
-                      ),
-                      actions: [
-                        TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                        TextButton(
-                          child: Text('OK'),
-                          onPressed: () {
-                            void getDosen(String nimNip) async {
-                              var firestore;
-                              DocumentSnapshot document = await firestore
-                                  .collection('dosen')
-                                  .doc(nimNip)
-                                  .get();
-                              if (document.exists) {
-                                print('Dosen data: ${document.data()}');
-                              } else {
-                                print('No dosen found with nip: $nimNip');
-                              }
-                            }
-
-                            bool _showDosenTile;
-                            setState(() => _showDosenTile = true);
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.blue,
-                ),
-                label: Text(
-                  'Tambah Dosen Pembimbing 2',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                ),
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
+            currentDosen2 == null
+                ? Container(
+                    margin: EdgeInsets.only(top: 16),
+                    height: 70,
+                    width: 350,
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: Colors.blue, // Set border color
+                        width: 2, // Set border width
+                      ),
                     ),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            String nimNip = '';
+                            return AlertDialog(
+                              title: Text('Masukkan NIP'),
+                              content: TextFormField(
+                                decoration: InputDecoration(labelText: 'NIP'),
+                                onChanged: (value) {
+                                  nimNip = value;
+                                  print(nimNip);
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                TextButton(
+                                  child: Text('OK'),
+                                  onPressed: () {
+                                    final query = firestore
+                                        .collection('Dosen')
+                                        .where('nimNip', isEqualTo: nimNip);
+                                    query
+                                        .get()
+                                        .then((QuerySnapshot querySnapshot) {
+                                      querySnapshot.docs.forEach((doc) {
+                                        final data = doc.data() as Map<String,
+                                            dynamic>; // Get data from doc
+                                        setState(() {
+                                          currentDosen2 = Dosen(
+                                            nimNip: data['nimNip'],
+                                            name: data['name'],
+                                          );
+                                        });
+
+                                        // Get the currently logged in Mahasiswa's nim
+                                        final mahasiswaNim =
+                                            userData['nimNip'] ?? 'Unknown Nim';
+
+                                        print('mahasiswaNim' + mahasiswaNim);
+
+                                        firestore
+                                            .collection('Mahasiswa')
+                                            .where('nimNip',
+                                                isEqualTo: mahasiswaNim)
+                                            .get()
+                                            .then(
+                                                (QuerySnapshot querySnapshot) {
+                                          querySnapshot.docs.forEach((doc) {
+                                            doc.reference.update({
+                                              'dospem_2': {
+                                                'name': data['name'],
+                                                'nimNip': data['nimNip'],
+                                                'status': false,
+                                              },
+                                              // Update other fields as needed
+                                            }).then((_) {
+                                              print("Dosen Pembimbing Updated");
+                                            }).catchError((error) {
+                                              print(
+                                                  "Failed to update Dosen Pembimbing: $error");
+                                            });
+
+                                            final dosenId =
+                                                doc.id; // Store the document ID
+
+                                            // Create a new chat document with the mahasiswa and dosen as participants
+                                            firestore.collection('chats').add({
+                                              'connections': [
+                                                mahasiswaNim,
+                                                data['nimNip']
+                                              ],
+                                            }).then((docRef) {
+                                              print(
+                                                  "Chat created with ID: ${docRef.id}");
+
+                                              // Create a new chat document in the 'chats' subcollection of the Mahasiswa document
+                                              doc.reference
+                                                  .collection('chats')
+                                                  .doc(docRef.id)
+                                                  .set({
+                                                'connection': data['nimNip'],
+                                                'lastTime': DateTime.now()
+                                                    .toIso8601String(),
+                                                'total_unread': 0,
+                                              }).then((_) {
+                                                print(
+                                                    "Chat created in Mahasiswa's chats with ID: ${docRef.id}");
+                                              }).catchError((error) {
+                                                print(
+                                                    "Failed to create chat in Mahasiswa's chats: $error");
+                                              });
+
+                                              // // Create a new chat document in the 'chats' subcollection of the Dosen document
+                                              firestore
+                                                  .collection('Dosen')
+                                                  .where('nimNip',
+                                                      isEqualTo: data['nimNip'])
+                                                  .get()
+                                                  .then((QuerySnapshot
+                                                      querySnapshot) {
+                                                querySnapshot.docs
+                                                    .forEach((dosenDoc) {
+                                                  // Create a new chat document in the 'chats' subcollection of the Dosen document
+                                                  dosenDoc.reference
+                                                      .collection('chats')
+                                                      .doc(docRef.id)
+                                                      .set({
+                                                    'connection':
+                                                        mahasiswaNim, // Store the Mahasiswa's nim
+                                                    'lastTime': DateTime.now()
+                                                        .toIso8601String(),
+                                                    'total_unread': 0,
+                                                  }).then((_) {
+                                                    print(
+                                                        "Chat created in Dosen's chats with ID: ${docRef.id}");
+                                                  }).catchError((error) {
+                                                    print(
+                                                        "Failed to create chat in Dosen's chats: $error");
+                                                  });
+                                                });
+                                              }).catchError((error) {
+                                                print(
+                                                    "Failed to find Dosen: $error");
+                                              });
+                                            }).catchError((error) {
+                                              print(
+                                                  "Failed to create chat: $error");
+                                            });
+                                          });
+                                        }).catchError((error) {
+                                          print(error);
+                                        });
+                                      });
+                                    }).catchError((error) {
+                                      print(error);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.blue,
+                      ),
+                      label: Text(
+                        'Tambah Dosen Pembimbing 2',
+                        style: blackTextStyle.copyWith(
+                          fontSize: 14,
+                          fontWeight: medium,
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                        elevation: MaterialStateProperty.all(0),
+                      ),
+                    ),
+                  )
+                : DosenTile(
+                    nip: currentDosen2!.nimNip,
+                    name: currentDosen2!.name,
+                    status: 'Pembimbing 2',
+                    imageUrl: 'assets/Acatar.png',
                   ),
-                  elevation: MaterialStateProperty.all(0),
-                ),
-              ),
-            ),
+            // Container(
+            //   margin: EdgeInsets.only(top: 16),
+            //   height: 70,
+            //   width: 350,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(18),
+            //     border: Border.all(
+            //       color: Colors.blue, // Set border color
+            //       width: 2, // Set border width
+            //     ),
+            //   ),
+            //   child: ElevatedButton.icon(
+            //     onPressed: () {
+            //       showDialog(
+            //         context: context,
+            //         builder: (context) => AlertDialog(
+            //           title: Text('Masukkan NIP'),
+            //           content: TextFormField(
+            //             decoration: InputDecoration(labelText: 'NIP'),
+            //           ),
+            //           actions: [
+            //             TextButton(
+            //               child: Text('Cancel'),
+            //               onPressed: () => Navigator.of(context).pop(),
+            //             ),
+            //             TextButton(
+            //               child: Text('OK'),
+            //               onPressed: () {
+            //                 void getDosen(String nimNip) async {
+            //                   var firestore;
+            //                   DocumentSnapshot document = await firestore
+            //                       .collection('dosen')
+            //                       .doc(nimNip)
+            //                       .get();
+            //                   if (document.exists) {
+            //                     print('Dosen data: ${document.data()}');
+            //                   } else {
+            //                     print('No dosen found with nip: $nimNip');
+            //                   }
+            //                 }
+
+            //                 bool _showDosenTile;
+            //                 setState(() => _showDosenTile = true);
+            //                 Navigator.of(context).pop();
+            //               },
+            //             ),
+            //           ],
+            //         ),
+            //       );
+            //     },
+            //     icon: Icon(
+            //       Icons.add,
+            //       color: Colors.blue,
+            //     ),
+            //     label: Text(
+            //       'Tambah Dosen Pembimbing 2',
+            //       style: blackTextStyle.copyWith(
+            //         fontSize: 14,
+            //         fontWeight: medium,
+            //       ),
+            //     ),
+            //     style: ButtonStyle(
+            //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //         RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(18),
+            //         ),
+            //       ),
+            //       elevation: MaterialStateProperty.all(0),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       );
