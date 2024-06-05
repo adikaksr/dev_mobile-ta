@@ -3,16 +3,11 @@ import 'package:get/get.dart';
 
 // import '../../../routes/app_pages.dart';
 
-class HomeController extends GetxController {
+class BimbinganController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> chatsStream(String email) {
-    return firestore
-        .collection('users')
-        .doc(email)
-        .collection("chats")
-        .orderBy("lastTime", descending: true)
-        .snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>> dataChatDosen() {
+    return firestore.collection('Dosen').snapshots();
   }
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> friendStream(String email) {

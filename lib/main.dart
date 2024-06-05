@@ -1,3 +1,6 @@
+import 'package:easkripsi/controller/bimbingan_controller.dart';
+import 'package:easkripsi/controller/chat_room_controller.dart';
+import 'package:easkripsi/controller/text_controller.dart';
 import 'package:easkripsi/cubit/page_cubit.dart';
 import 'package:easkripsi/firebase_options.dart';
 import 'package:easkripsi/ui/pages/bimbingan_page.dart';
@@ -16,6 +19,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'ui/pages/splash_page.dart';
 
 void main() async {
@@ -24,6 +28,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  Get.put(TextController());
+  Get.put(BimbinganController());
   runApp(const MyApp());
 }
 

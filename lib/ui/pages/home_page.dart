@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easkripsi/controller/text_controller.dart';
 import 'package:easkripsi/ui/pages/akun_page.dart';
 import 'package:easkripsi/ui/pages/bimbingan_page.dart';
 import 'package:easkripsi/ui/widgets/dosen_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import '../../shared/theme.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,6 +28,7 @@ class Dosen {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextController textController = Get.put(TextController());
   Dosen? currentDosen;
   Dosen? currentDosen2;
   final firestore = FirebaseFirestore.instance;
@@ -60,6 +63,7 @@ class _HomePageState extends State<HomePage> {
       });
       setState(() {
         userData = data;
+        textController.updateData(data['nimNip']);
       });
     });
   }
@@ -144,11 +148,11 @@ class _HomePageState extends State<HomePage> {
                   }
 
                   Map<String, dynamic> data = snapshot.data ?? {};
-                  String name = data['name'] ?? 'No name';
+                  String mahasiswaName = data['name'] ?? 'No name';
 
                   return Container(
                     child: Text(
-                      'Hello,\n$name',
+                      'Hello,\n$mahasiswaName',
                       style: blackTextStyle.copyWith(
                         fontSize: 24,
                         fontWeight: semiBold,
