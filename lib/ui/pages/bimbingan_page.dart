@@ -77,6 +77,7 @@ class _BimbinganPageState extends State<BimbinganPage> {
           .collection('Mahasiswa')
           .doc(mahasiswaSnapshot.docs[0].id)
           .collection('chats')
+          .orderBy("lastTime", descending: true)
           .snapshots();
       // for (var doc in mahasiswaSnapshot.docs) {
       //   yield* doc.reference
@@ -136,7 +137,7 @@ class _BimbinganPageState extends State<BimbinganPage> {
         ),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: bimbinganController.dataChatDosen(),
+        stream: getChatsData(textController.nimMahasiswa.value),
         // builder: (BuildContext context,
         //     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         builder: (context, snapshot) {
@@ -146,17 +147,17 @@ class _BimbinganPageState extends State<BimbinganPage> {
             print('dapat userData: $userData');
             print('dapat chatData: $chatData');
             if (chatData.isEmpty) {
-              return const Center(child: Text('Belum ada chat tersedia!'));
+              return const Center(child: Text('Belum ada bimbingan tersedia!'));
             } else {
               return ListView.builder(
                 itemCount: chatData.length,
                 itemBuilder: (context, index) {
                   var chat = chatData[index].data();
 
-                  print(chatData[0].data());
+                  // print(chat['connection']);
 
                   return ListTile(
-                    title: Text('hadi'),
+                    title: Text(chat['name']),
                     subtitle: Text(
                       "Gimana progressnya?",
                       maxLines: 1,
@@ -170,21 +171,25 @@ class _BimbinganPageState extends State<BimbinganPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("10min"),
-                        Container(
-                          margin: EdgeInsets.only(top: 5),
-                          height: 20,
-                          width: 20,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.green,
-                          ),
-                          child: Center(
-                            child: Text("1",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                )),
-                          ),
-                        ),
+                        chat['total_unread'] != 0
+                            ? Container(
+                                margin: EdgeInsets.only(top: 5),
+                                height: 20,
+                                width: 20,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.green,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    chat['total_unread'].toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
                       ],
                     ),
                     onTap: () {

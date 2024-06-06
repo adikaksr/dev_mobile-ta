@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   final firestore = FirebaseFirestore.instance;
   final storage = new FlutterSecureStorage();
   Map<String, dynamic> userData = {};
+  String collectedMahasiswa = '';
 
   @override
   void initState() {
@@ -149,6 +150,7 @@ class _HomePageState extends State<HomePage> {
 
                   Map<String, dynamic> data = snapshot.data ?? {};
                   String mahasiswaName = data['name'] ?? 'No name';
+                  collectedMahasiswa = mahasiswaName;
 
                   return Container(
                     child: Text(
@@ -377,10 +379,12 @@ class _HomePageState extends State<HomePage> {
                                                   .collection('chats')
                                                   .doc(docRef.id)
                                                   .set({
+                                                'name': data['name'],
                                                 'connection': data['nimNip'],
                                                 'lastTime': DateTime.now()
                                                     .toIso8601String(),
                                                 'total_unread': 0,
+                                                'chat_id': docRef.id,
                                               }).then((_) {
                                                 print(
                                                     "Chat created in Mahasiswa's chats with ID: ${docRef.id}");
@@ -404,11 +408,13 @@ class _HomePageState extends State<HomePage> {
                                                       .collection('chats')
                                                       .doc(docRef.id)
                                                       .set({
+                                                    'name': collectedMahasiswa,
                                                     'connection':
                                                         mahasiswaNim, // Store the Mahasiswa's nim
                                                     'lastTime': DateTime.now()
                                                         .toIso8601String(),
                                                     'total_unread': 0,
+                                                    'chat_id': docRef.id,
                                                   }).then((_) {
                                                     print(
                                                         "Chat created in Dosen's chats with ID: ${docRef.id}");
@@ -568,10 +574,12 @@ class _HomePageState extends State<HomePage> {
                                                   .collection('chats')
                                                   .doc(docRef.id)
                                                   .set({
+                                                'name': data['name'],
                                                 'connection': data['nimNip'],
                                                 'lastTime': DateTime.now()
                                                     .toIso8601String(),
                                                 'total_unread': 0,
+                                                'chat_id': docRef.id,
                                               }).then((_) {
                                                 print(
                                                     "Chat created in Mahasiswa's chats with ID: ${docRef.id}");
@@ -595,11 +603,13 @@ class _HomePageState extends State<HomePage> {
                                                       .collection('chats')
                                                       .doc(docRef.id)
                                                       .set({
+                                                    'name': collectedMahasiswa,
                                                     'connection':
                                                         mahasiswaNim, // Store the Mahasiswa's nim
                                                     'lastTime': DateTime.now()
                                                         .toIso8601String(),
                                                     'total_unread': 0,
+                                                    'chat_id': docRef.id,
                                                   }).then((_) {
                                                     print(
                                                         "Chat created in Dosen's chats with ID: ${docRef.id}");
