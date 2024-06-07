@@ -24,6 +24,23 @@ class _BimbinganPageState extends State<BimbinganPage> {
   final textController = Get.find<TextController>();
   final bimbinganController = Get.find<BimbinganController>();
   Map<String, dynamic> userData = {};
+  String formatDuration(Duration duration) {
+    if (duration.inSeconds < 60) {
+      return '${duration.inSeconds}dtk';
+    } else if (duration.inMinutes < 60) {
+      return '${duration.inMinutes}mnt';
+    } else if (duration.inHours < 24) {
+      return '${duration.inHours}jam';
+    } else if (duration.inDays < 7) {
+      return '${duration.inDays}hr';
+    } else if (duration.inDays < 30) {
+      return '${(duration.inDays / 7).round()}mg';
+    } else if (duration.inDays < 365) {
+      return '${(duration.inDays / 30).round()}bln';
+    } else {
+      return '${(duration.inDays / 365).round()}thn';
+    }
+  }
 
   // late StreamSubscription<List<QuerySnapshot>> _chatsSubscription;
   List<Map<String, dynamic>> _chatData = [];
@@ -144,8 +161,6 @@ class _BimbinganPageState extends State<BimbinganPage> {
           if (snapshot.connectionState == ConnectionState.active) {
             var chatData = snapshot.data!.docs;
 
-            print('dapat userData: $userData');
-            print('dapat chatData: $chatData');
             if (chatData.isEmpty) {
               return const Center(child: Text('Belum ada bimbingan tersedia!'));
             } else {
@@ -154,7 +169,9 @@ class _BimbinganPageState extends State<BimbinganPage> {
                 itemBuilder: (context, index) {
                   var chat = chatData[index].data();
 
-                  // print(chat['connection']);
+                  DateTime lastTime = DateTime.parse(chat['lastTime']);
+                  Duration duration = DateTime.now().difference(lastTime);
+                  String durationString = formatDuration(duration);
 
                   return ListTile(
                     title: Text(chat['name']),
@@ -170,7 +187,7 @@ class _BimbinganPageState extends State<BimbinganPage> {
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("10min"),
+                        Text(durationString),
                         chat['total_unread'] != 0
                             ? Container(
                                 margin: EdgeInsets.only(top: 5),
