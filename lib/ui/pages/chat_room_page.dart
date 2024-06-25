@@ -8,7 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:easkripsi/controller/chat_room_controller.dart';
 import 'package:get/get.dart';
 
+import '../../controller/text_controller.dart';
+
 class ChatRoomPage extends StatefulWidget {
+  final String chatId;
+  final String chatName;
+  final String nipDosen;
+
+  ChatRoomPage(
+      {required this.chatId, required this.chatName, required this.nipDosen});
   @override
   _ChatRoomPageState createState() => _ChatRoomPageState();
 }
@@ -16,6 +24,7 @@ class ChatRoomPage extends StatefulWidget {
 class _ChatRoomPageState extends State<ChatRoomPage> {
   final List<String> messages = [];
   final TextEditingController messageController = TextEditingController();
+  final textController = Get.find<TextController>();
   bool isShowEmoji = false;
   FocusNode focusNode = FocusNode();
   ChatRoomController controller = Get.put(ChatRoomController());
@@ -38,9 +47,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       appBar: AppBar(
         leadingWidth: 100,
         leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-          },
+          onTap: () => Get.back(),
           borderRadius: BorderRadius.circular(100),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,7 +55,10 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
               SizedBox(width: 5),
               Icon(Icons.arrow_back),
               SizedBox(width: 5),
-              CircleAvatar(radius: 22),
+              CircleAvatar(
+                radius: 22,
+                backgroundImage: AssetImage('assets/image_avatar.png'),
+              ),
             ],
           ),
         ),
@@ -56,19 +66,19 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Dosen 1 Informatika',
+              widget.chatName,
               style: blackTextStyle.copyWith(
                 fontSize: 15,
                 fontWeight: medium,
               ),
             ),
-            Text(
-              'Status',
-              style: grayTextStyle.copyWith(
-                fontSize: 13,
-                fontWeight: light,
-              ),
-            ),
+            // Text(
+            //   'Status',
+            //   style: grayTextStyle.copyWith(
+            //     fontSize: 13,
+            //     fontWeight: light,
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -86,11 +96,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 children: [
                   ItemChat(
                     isSender: true,
-                    message: 'oi, warkop cuy?',
+                    message: 'Assalamualaikum',
                   ),
                   ItemChat(
                     isSender: false,
-                    message: 'gaskan',
+                    message: 'waalaikumsalam',
                   ),
                 ],
               ),
@@ -208,10 +218,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(100),
                     onTap: () {
-                      setState(() {
-                        messages.add(messageController.text);
-                        messageController.clear();
-                      });
+                      controller.newChat(
+                          textController.nimMahasiswa.value,
+                          widget.nipDosen,
+                          widget.chatId,
+                          controller.chatC.text);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),

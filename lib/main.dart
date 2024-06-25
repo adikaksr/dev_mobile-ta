@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
           '/kehadiran': (context) => const KehadiranPage(),
           '/form': (context) => FormPage(),
           '/second-form': (context) => SecondFormPage(),
-          '/chat-room': (context) => ChatRoomPage(),
+          // '/chat-room': (context) => ChatRoomPage(),
           '/main-dosen': (context) => const MainPageDosen(),
           '/main-koorta': (context) => KoordinatorTAPage(),
           '/main-operator': (context) => OperatorPage(),

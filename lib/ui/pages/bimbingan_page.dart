@@ -210,10 +210,10 @@ class _BimbinganPageState extends State<BimbinganPage> {
                       ],
                     ),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ChatRoomPage()),
-                      );
+                      Get.to(() => ChatRoomPage(
+                          chatId: chat['chat_id'],
+                          chatName: chat['name'],
+                          nipDosen: chat['connection']));
                     },
                   );
                 },
