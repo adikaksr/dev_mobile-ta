@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 class ChatRoomController extends GetxController {
   var isShowEmoji = false.obs;
+  int total_unread = 0;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -19,16 +20,67 @@ class ChatRoomController extends GetxController {
     chatC.text = chatC.text.substring(0, chatC.text.length - 2);
   }
 
-  void newChat(String nimNip, String nipDosen, String chat_id, String chat) {
+  void newChat(
+      String nimNip, String nipDosen, String chatId, String chat) async {
     CollectionReference chats = firestore.collection("chats");
+    CollectionReference Mahasiswa = firestore.collection("Mahasiswa");
+    CollectionReference Dosen = firestore.collection("Dosen");
+    String date = DateTime.now().toString();
 
-    chats.doc(chat_id).collection("chat").add({
+    await chats.doc(chatId).collection("chat").add({
       "pengirim": nimNip,
       "penerima": nipDosen,
       "msg": chat,
-      "time": DateTime.now().toIso8601String(),
+      "time": date,
       "isRead": false,
     });
+
+    QuerySnapshot mahasiswaSnapshot = await firestore
+        .collection('Mahasiswa')
+        .where('nimNip', isEqualTo: nimNip)
+        .get();
+
+    await Mahasiswa.doc(mahasiswaSnapshot.docs[0].id)
+        .collection("chats")
+        .doc(chatId)
+        .update({
+      "lastTime": date,
+    });
+
+    final checkChatsDosen =
+        await Dosen.doc(nipDosen).collection("chats").doc(chatId).get();
+
+    QuerySnapshot dosenSnapshot = await firestore
+        .collection('Dosen')
+        .where('nimNip', isEqualTo: nipDosen)
+        .get();
+
+    if (checkChatsDosen.exists) {
+      await Dosen.doc(dosenSnapshot.docs[0].id)
+          .collection("chats")
+          .doc(chatId)
+          .get()
+          .then((value) => total_unread = value.data()!["total_unread"] as int);
+      //update for dosen
+      await Dosen.doc(dosenSnapshot.docs[0].id)
+          .collection("chats")
+          .doc(chatId)
+          .update({
+        "lastTime": date,
+        "total_unread": total_unread + 1,
+      });
+      print(chatId);
+    } else {
+      //new for dosen
+      await Dosen.doc(dosenSnapshot.docs[0].id)
+          .collection("chats")
+          .doc(chatId)
+          .set({
+        "connection": nimNip,
+        "lastTime": date,
+        "total_unread": total_unread + 1,
+      });
+    }
   }
 
   @override
