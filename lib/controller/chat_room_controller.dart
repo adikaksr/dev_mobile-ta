@@ -25,6 +25,7 @@ class ChatRoomController extends GetxController {
     CollectionReference chats = firestore.collection("chats");
     CollectionReference Mahasiswa = firestore.collection("Mahasiswa");
     CollectionReference Dosen = firestore.collection("Dosen");
+
     String date = DateTime.now().toString();
 
     await chats.doc(chatId).collection("chat").add({
@@ -47,27 +48,34 @@ class ChatRoomController extends GetxController {
       "lastTime": date,
     });
 
-    final checkChatsDosen =
-        await Dosen.doc(nipDosen).collection("chats").doc(chatId).get();
-
     QuerySnapshot dosenSnapshot = await firestore
         .collection('Dosen')
         .where('nimNip', isEqualTo: nipDosen)
         .get();
 
+    final checkChatsDosen = await Dosen.doc(dosenSnapshot.docs[0].id)
+        .collection("chats")
+        .doc(chatId)
+        .get();
+
     if (checkChatsDosen.exists) {
-      await Dosen.doc(dosenSnapshot.docs[0].id)
-          .collection("chats")
+      final checkTotalUnread = await chats
           .doc(chatId)
-          .get()
-          .then((value) => total_unread = value.data()!["total_unread"] as int);
+          .collection("chat")
+          .where("isRead", isEqualTo: false)
+          .where("pengirim", isEqualTo: nimNip)
+          .get();
+
+      //total unread for dosen
+      total_unread = checkTotalUnread.docs.length;
+
       //update for dosen
       await Dosen.doc(dosenSnapshot.docs[0].id)
           .collection("chats")
           .doc(chatId)
           .update({
         "lastTime": date,
-        "total_unread": total_unread + 1,
+        "total_unread": total_unread,
       });
       print(chatId);
     } else {
@@ -78,7 +86,7 @@ class ChatRoomController extends GetxController {
           .set({
         "connection": nimNip,
         "lastTime": date,
-        "total_unread": total_unread + 1,
+        "total_unread": total_unread,
       });
     }
   }
