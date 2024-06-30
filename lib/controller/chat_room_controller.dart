@@ -46,6 +46,7 @@ class ChatRoomController extends GetxController {
         .doc(chatId)
         .update({
       "lastTime": date,
+      "last_chat": chat,
     });
 
     QuerySnapshot dosenSnapshot = await firestore
@@ -76,6 +77,7 @@ class ChatRoomController extends GetxController {
           .update({
         "lastTime": date,
         "total_unread": total_unread,
+        "last_chat": chat,
       });
       print(chatId);
     } else {
@@ -87,6 +89,7 @@ class ChatRoomController extends GetxController {
         "connection": nimNip,
         "lastTime": date,
         "total_unread": total_unread,
+        "last_chat": chat,
       });
     }
   }

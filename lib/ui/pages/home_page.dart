@@ -385,6 +385,7 @@ class _HomePageState extends State<HomePage> {
                                                     .toIso8601String(),
                                                 'total_unread': 0,
                                                 'chat_id': docRef.id,
+                                                'last_chat': '',
                                               }).then((_) {
                                                 print(
                                                     "Chat created in Mahasiswa's chats with ID: ${docRef.id}");
@@ -415,6 +416,7 @@ class _HomePageState extends State<HomePage> {
                                                         .toIso8601String(),
                                                     'total_unread': 0,
                                                     'chat_id': docRef.id,
+                                                    'last_chat': '',
                                                   }).then((_) {
                                                     print(
                                                         "Chat created in Dosen's chats with ID: ${docRef.id}");
@@ -580,6 +582,7 @@ class _HomePageState extends State<HomePage> {
                                                     .toIso8601String(),
                                                 'total_unread': 0,
                                                 'chat_id': docRef.id,
+                                                'last_chat': '',
                                               }).then((_) {
                                                 print(
                                                     "Chat created in Mahasiswa's chats with ID: ${docRef.id}");
@@ -610,6 +613,7 @@ class _HomePageState extends State<HomePage> {
                                                         .toIso8601String(),
                                                     'total_unread': 0,
                                                     'chat_id': docRef.id,
+                                                    'last_chat': '',
                                                   }).then((_) {
                                                     print(
                                                         "Chat created in Dosen's chats with ID: ${docRef.id}");

@@ -8,6 +8,7 @@ import 'package:easkripsi/ui/pages/chat_room_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../controller/bimbingan_controller.dart';
 
@@ -24,23 +25,6 @@ class _BimbinganPageState extends State<BimbinganPage> {
   final textController = Get.find<TextController>();
   final bimbinganController = Get.find<BimbinganController>();
   Map<String, dynamic> userData = {};
-  String formatDuration(Duration duration) {
-    if (duration.inSeconds < 60) {
-      return '${duration.inSeconds}dtk';
-    } else if (duration.inMinutes < 60) {
-      return '${duration.inMinutes}mnt';
-    } else if (duration.inHours < 24) {
-      return '${duration.inHours}jam';
-    } else if (duration.inDays < 7) {
-      return '${duration.inDays}hr';
-    } else if (duration.inDays < 30) {
-      return '${(duration.inDays / 7).round()}mg';
-    } else if (duration.inDays < 365) {
-      return '${(duration.inDays / 30).round()}bln';
-    } else {
-      return '${(duration.inDays / 365).round()}thn';
-    }
-  }
 
   // late StreamSubscription<List<QuerySnapshot>> _chatsSubscription;
   List<Map<String, dynamic>> _chatData = [];
@@ -169,14 +153,30 @@ class _BimbinganPageState extends State<BimbinganPage> {
                 itemBuilder: (context, index) {
                   var chat = chatData[index].data();
 
-                  DateTime lastTime = DateTime.parse(chat['lastTime']);
-                  Duration duration = DateTime.now().difference(lastTime);
-                  String durationString = formatDuration(duration);
+                  // format the lastTime to show the date or time
+                  String formatDuration(DateTime lastTime) {
+                    DateTime now = DateTime.now();
+                    DateTime today = DateTime(now.year, now.month, now.day);
+                    DateTime yesterday = today.subtract(Duration(days: 1));
+                    DateTime lastDate =
+                        DateTime(lastTime.year, lastTime.month, lastTime.day);
+
+                    if (lastDate == today) {
+                      // If the lastTime is today, show the clock time
+                      return DateFormat('HH:mm').format(lastTime);
+                    } else if (lastDate == yesterday) {
+                      // If the lastTime is yesterday, show "Kemarin"
+                      return 'Kemarin';
+                    } else {
+                      // If the lastTime is more than one day ago, show the date
+                      return DateFormat('dd/MM/yyyy').format(lastTime);
+                    }
+                  }
 
                   return ListTile(
                     title: Text(chat['name']),
                     subtitle: Text(
-                      "Gimana progressnya?",
+                      chat['last_chat'] ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -186,8 +186,12 @@ class _BimbinganPageState extends State<BimbinganPage> {
                     ),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment:
+                          CrossAxisAlignment.end, // Align to the right
                       children: [
-                        Text(durationString),
+                        // Show the formatted lastTime
+                        Text(formatDuration(DateTime.parse(chat['lastTime']))),
+                        // Show the unread count if it's not zero
                         chat['total_unread'] != 0
                             ? Container(
                                 margin: EdgeInsets.only(top: 5),
@@ -199,9 +203,12 @@ class _BimbinganPageState extends State<BimbinganPage> {
                                 ),
                                 child: Center(
                                   child: Text(
+                                    // Show the unread count
                                     chat['total_unread'].toString(),
                                     style: TextStyle(
                                       color: Colors.white,
+                                      fontSize:
+                                          12, // Adjust font size for better fit if necessary
                                     ),
                                   ),
                                 ),
