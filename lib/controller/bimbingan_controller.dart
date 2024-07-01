@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easkripsi/ui/pages/chat_room_page.dart';
 import 'package:get/get.dart';
 
 // import '../../../routes/app_pages.dart';
@@ -14,37 +15,48 @@ class BimbinganController extends GetxController {
     return firestore.collection('users').doc(email).snapshots();
   }
 
-  void goToChatRoom(String chat_id, String email, String friendEmail) async {
+  void goToChatRoom(
+      String chatId, String dosenName, String nimNip, String nipDosen) async {
     CollectionReference chats = firestore.collection('chats');
-    CollectionReference users = firestore.collection('users');
+    CollectionReference Mahasiswa = firestore.collection('Mahasiswa');
 
     final updateStatusChat = await chats
-        .doc(chat_id)
+        .doc(chatId)
         .collection("chat")
         .where("isRead", isEqualTo: false)
-        .where("penerima", isEqualTo: email)
+        .where("penerima", isEqualTo: nimNip)
         .get();
 
     updateStatusChat.docs.forEach((element) async {
       await chats
-          .doc(chat_id)
+          .doc(chatId)
           .collection("chat")
           .doc(element.id)
           .update({"isRead": true});
     });
 
-    await users
-        .doc(email)
+    QuerySnapshot mahasiswaSnapshot = await firestore
+        .collection('Mahasiswa')
+        .where('nimNip', isEqualTo: nimNip)
+        .get();
+
+    await Mahasiswa.doc(mahasiswaSnapshot.docs[0].id)
         .collection("chats")
-        .doc(chat_id)
+        .doc(chatId)
         .update({"total_unread": 0});
 
-    // Get.toNamed(
-    //   Routes.CHAT_ROOM,
-    //   arguments: {
-    //     "chat_id": chat_id,
-    //     "friendEmail": friendEmail,
-    //   },
-    // );
+    Get.to(() => ChatRoomPage(
+          chatId: chatId,
+          chatName: dosenName,
+          nipDosen: nipDosen,
+        ));
+
+    //   // Get.toNamed(
+    //   //   Routes.CHAT_ROOM,
+    //   //   arguments: {
+    //   //     "chatId": chatId,
+    //   //     "friendEmail": friendEmail,
+    //   //   },
+    //   // );
   }
 }

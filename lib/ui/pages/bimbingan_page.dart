@@ -68,7 +68,6 @@ class _BimbinganPageState extends State<BimbinganPage> {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getChatsData(String nim) async* {
     try {
-      // Replace 'yourMahasiswaId' with the actual Mahasiswa ID
       QuerySnapshot mahasiswaSnapshot = await firestore
           .collection('Mahasiswa')
           .where('nimNip', isEqualTo: nim)
@@ -80,38 +79,12 @@ class _BimbinganPageState extends State<BimbinganPage> {
           .collection('chats')
           .orderBy("lastTime", descending: true)
           .snapshots();
-      // for (var doc in mahasiswaSnapshot.docs) {
-      //   yield* doc.reference
-      //       .collection('chats')
-      //       .snapshots()
-      //       .map((snapshot) => [snapshot]);
-      // }
+
       yield* chatData;
     } catch (e) {
       print('Failed to get chats data: $e');
     }
   }
-
-  // Future<DocumentSnapshot> getDosenData() async {
-  //   // Replace 'yourChatId' with the actual chat ID
-  //   final chatDoc = await firestore.collection('chats').doc('yourChatId').get();
-  //   final dosenNimNip = chatDoc.data()?['connections'][
-  //       1]; // Assuming the Dosen's nimNip is the second item in the 'connections' array
-
-  //   // Fetch the Dosen data
-  //   final querySnapshot = await firestore
-  //       .collection('Dosen')
-  //       .where('nimNip', isEqualTo: dosenNimNip)
-  //       .get();
-
-  //   if (querySnapshot.docs.isEmpty) {
-  //     // Handle the case where the query didn't match any documents
-  //     // For example, you could throw an error or return null
-  //     throw Exception('No matching Dosen found');
-  //   }
-
-  //   return querySnapshot.docs.first;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -217,10 +190,16 @@ class _BimbinganPageState extends State<BimbinganPage> {
                       ],
                     ),
                     onTap: () {
-                      Get.to(() => ChatRoomPage(
-                          chatId: chat['chat_id'],
-                          chatName: chat['name'],
-                          nipDosen: chat['connection']));
+                      // Get.to(() => ChatRoomPage(
+                      //     chatId: chat['chat_id'],
+                      //     chatName: chat['name'],
+                      //     nipDosen: chat['connection']));
+                      bimbinganController.goToChatRoom(
+                        chat['chat_id'],
+                        chat['name'],
+                        textController.nimMahasiswa.value,
+                        chat['connection'],
+                      );
                     },
                   );
                 },
