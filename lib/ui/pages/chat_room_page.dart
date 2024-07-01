@@ -72,13 +72,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                 fontWeight: medium,
               ),
             ),
-            // Text(
-            //   'Status',
-            //   style: grayTextStyle.copyWith(
-            //     fontSize: 13,
-            //     fontWeight: light,
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -86,24 +79,45 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
         children: [
           Expanded(
             child: Container(
-              child: ListView(
-                // itemCount: messages.length,
-                // itemBuilder: (context, index) {
-                //   return ListTile(
-                //     title: Text(messages[index]),
-                //   );
-                // },
-                children: [
-                  ItemChat(
-                    isSender: true,
-                    message: 'Assalamualaikum',
-                  ),
-                  ItemChat(
-                    isSender: false,
-                    message: 'waalaikumsalam',
-                  ),
-                ],
+              child: StreamBuilder(
+                stream: controller.streamChats(widget.chatId),
+                builder: (context, snapshot) {
+                  // print(snapshot.data!.docs.length);
+                  if (snapshot.data == null || !snapshot.hasData) {
+                    return Center(
+                        child:
+                            CircularProgressIndicator()); // or some other widget to show loading or empty state
+                  }
+                  var alldata = snapshot.data!.docs;
+                  if (snapshot.connectionState == ConnectionState.active) {
+                    return ListView.builder(
+                      itemCount: alldata.length,
+                      itemBuilder: (context, index) => ItemChat(
+                        message: "${alldata[index]['msg']}",
+                        isSender: alldata[index]['pengirim'] ==
+                                textController.nimMahasiswa.value
+                            ? true
+                            : false,
+                      ),
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
               ),
+              // child: ListView(
+              //   children: [
+              //     ItemChat(
+              //       isSender: true,
+              //       message: 'Assalamualaikum',
+              //     ),
+              //     ItemChat(
+              //       isSender: false,
+              //       message: 'waalaikumsalam',
+              //     ),
+              //   ],
+              // ),
             ),
           ),
           Container(
