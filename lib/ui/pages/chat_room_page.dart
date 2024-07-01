@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:easkripsi/shared/theme.dart';
 import 'package:easkripsi/ui/widgets/item_chat.dart';
@@ -89,16 +90,71 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                             CircularProgressIndicator()); // or some other widget to show loading or empty state
                   }
                   var alldata = snapshot.data!.docs;
+                  Timer(
+                    Duration.zero,
+                    () {
+                      if (controller.scrollC.hasClients) {
+                        // Check if the ScrollController is attached to any scroll views.
+                        controller.scrollC.jumpTo(
+                            controller.scrollC.position.maxScrollExtent);
+                      }
+                    },
+                  );
                   if (snapshot.connectionState == ConnectionState.active) {
                     return ListView.builder(
+                      controller: controller.scrollC,
                       itemCount: alldata.length,
-                      itemBuilder: (context, index) => ItemChat(
-                        message: "${alldata[index]['msg']}",
-                        isSender: alldata[index]['pengirim'] ==
-                                textController.nimMahasiswa.value
-                            ? true
-                            : false,
-                      ),
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
+                          return Column(
+                            children: [
+                              Text("${alldata[index]['groupTime']}",
+                                  style: blackTextStyle.copyWith(
+                                    fontSize: 13,
+                                    fontWeight: bold,
+                                  )),
+                              ItemChat(
+                                message: "${alldata[index]['msg']}",
+                                isSender: alldata[index]['pengirim'] ==
+                                        textController.nimMahasiswa.value
+                                    ? true
+                                    : false,
+                                time: "${alldata[index]['time']}",
+                              ),
+                            ],
+                          );
+                        } else {
+                          if (alldata[index]['groupTime'] ==
+                              alldata[index - 1]['groupTime']) {
+                            return ItemChat(
+                              message: "${alldata[index]['msg']}",
+                              isSender: alldata[index]['pengirim'] ==
+                                      textController.nimMahasiswa.value
+                                  ? true
+                                  : false,
+                              time: "${alldata[index]['time']}",
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                Text("${alldata[index]['groupTime']}",
+                                    style: blackTextStyle.copyWith(
+                                      fontSize: 13,
+                                      fontWeight: bold,
+                                    )),
+                                ItemChat(
+                                  message: "${alldata[index]['msg']}",
+                                  isSender: alldata[index]['pengirim'] ==
+                                          textController.nimMahasiswa.value
+                                      ? true
+                                      : false,
+                                  time: "${alldata[index]['time']}",
+                                ),
+                              ],
+                            );
+                          }
+                        }
+                      },
                     );
                   }
                   return Center(
@@ -106,18 +162,6 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   );
                 },
               ),
-              // child: ListView(
-              //   children: [
-              //     ItemChat(
-              //       isSender: true,
-              //       message: 'Assalamualaikum',
-              //     ),
-              //     ItemChat(
-              //       isSender: false,
-              //       message: 'waalaikumsalam',
-              //     ),
-              //   ],
-              // ),
             ),
           ),
           Container(
@@ -147,7 +191,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                         }
                       },
                       focusNode: focusNode,
+                      autocorrect: false,
                       controller: controller.chatC,
+                      onEditingComplete: () => controller.newChat(
+                          textController.nimMahasiswa.value,
+                          widget.nipDosen,
+                          widget.chatId,
+                          controller.chatC.text),
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
                           onPressed: () {

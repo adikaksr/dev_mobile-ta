@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../shared/theme.dart';
 
 class ItemChat extends StatelessWidget {
   final bool isSender;
   final String message;
+  final String time;
 
   const ItemChat({
     super.key,
     required this.isSender,
     required this.message,
+    required this.time,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: 15,
+        vertical: 10,
         horizontal: 20,
       ),
       child: Column(
@@ -43,7 +46,7 @@ class ItemChat extends StatelessWidget {
             ),
           ),
           SizedBox(height: 5),
-          Text('18.00'),
+          Text(DateFormat.jm().format(DateTime.parse(time))),
         ],
       ),
       alignment: isSender ? Alignment.centerRight : Alignment.centerLeft,
