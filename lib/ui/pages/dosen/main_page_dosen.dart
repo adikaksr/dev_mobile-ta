@@ -1,8 +1,8 @@
 import 'package:easkripsi/cubit/page_cubit.dart';
 import 'package:easkripsi/ui/pages/bimbingan_page.dart';
+import 'package:easkripsi/ui/pages/dosen/bimbingan_page_dosen.dart';
 import 'package:easkripsi/ui/pages/dosen/daftar_mahasiswa_page.dart';
 import 'package:easkripsi/ui/pages/dosen/home_page_dosen.dart';
-import 'package:easkripsi/ui/pages/form_page.dart';
 import 'package:easkripsi/ui/pages/home_page.dart';
 import 'package:easkripsi/ui/pages/jadwal_page.dart';
 import 'package:easkripsi/ui/widgets/custom_bottom_navigation.dart';

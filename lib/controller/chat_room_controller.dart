@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class ChatRoomController extends GetxController {
@@ -11,10 +14,13 @@ class ChatRoomController extends GetxController {
   int total_unread = 0;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
 
   late FocusNode focusNode;
   late TextEditingController chatC;
   late ScrollController scrollC;
+
+  XFile? pickedFile = null;
 
   Stream<QuerySnapshot<Map<String, dynamic>>> streamChats(String chatId) {
     CollectionReference chats = firestore.collection("chats");
@@ -32,6 +38,62 @@ class ChatRoomController extends GetxController {
 
   void deleteEmoji() {
     chatC.text = chatC.text.substring(0, chatC.text.length - 2);
+  }
+
+  // void uploadImage() async {
+  //   Reference storageRef = storage.ref();
+  //   File file = File(pickedFile!.path);
+
+  //   try {
+  //     final dataUpload = await storageRef.putFile(file);
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+  Future<void> uploadImage(
+      String chatId, String nimNip, String nipDosen) async {
+    if (pickedFile == null) {
+      print("No file selected");
+      return;
+    }
+
+    File file = File(pickedFile!.path);
+    String fileName =
+        DateTime.now().millisecondsSinceEpoch.toString() + "_" + nimNip;
+    String filePath = 'chat_images/$chatId/$fileName';
+
+    try {
+      // Upload file to Firebase Storage
+      Reference storageRef = storage.ref().child(filePath);
+      UploadTask uploadTask = storageRef.putFile(file);
+      TaskSnapshot taskSnapshot = await uploadTask;
+
+      // Get download URL
+      String downloadURL = await taskSnapshot.ref.getDownloadURL();
+
+      // Save file metadata in the chat room on Firestore
+      String date = DateTime.now().toIso8601String();
+      CollectionReference chats = firestore.collection("chats");
+      // CollectionReference Mahasiswa = firestore.collection("Mahasiswa");
+      // CollectionReference Dosen = firestore.collection("Dosen");
+
+      await chats.doc(chatId).collection("chat").add({
+        "pengirim": nipDosen,
+        "penerima": nimNip,
+        "imageUrl": downloadURL,
+        "time": date,
+        "isRead": false,
+        "type": "image", // Indicate this is an image message
+        "groupTime": DateFormat.yMMMMd('en_US').format(DateTime.parse(date)),
+      });
+
+      // Optionally, update last message info for chat overview
+      // This step depends on your app's specific requirements
+
+      print("Image uploaded and metadata saved to Firestore");
+    } catch (e) {
+      print(e);
+    }
   }
 
   void newChat(
@@ -87,7 +149,7 @@ class ChatRoomController extends GetxController {
             .doc(chatId)
             .collection("chat")
             .where("isRead", isEqualTo: false)
-            .where("pengirim", isEqualTo: nimNip)
+            .where("pengirim", isEqualTo: nipDosen)
             .get();
 
         //total unread for dosen

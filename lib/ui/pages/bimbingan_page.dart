@@ -147,7 +147,7 @@ class _BimbinganPageState extends State<BimbinganPage> {
                   }
 
                   return ListTile(
-                    title: Text(chat['name']),
+                    title: Text(chat['name'] ?? ''),
                     subtitle: Text(
                       chat['last_chat'] ?? '',
                       maxLines: 1,

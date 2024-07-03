@@ -1,11 +1,51 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easkripsi/ui/pages/akun_page.dart';
 import 'package:easkripsi/ui/pages/bimbingan_page.dart';
 import 'package:easkripsi/ui/widgets/mahasiswa_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import '../../../controller/text_controller.dart';
 import '../../../shared/theme.dart';
 
-class HomePageDosen extends StatelessWidget {
+class HomePageDosen extends StatefulWidget {
   const HomePageDosen({super.key});
+
+  @override
+  State<HomePageDosen> createState() => _HomePageDosenState();
+}
+
+class _HomePageDosenState extends State<HomePageDosen> {
+  final TextController textController = Get.put(TextController());
+  final firestore = FirebaseFirestore.instance;
+  final storage = new FlutterSecureStorage();
+  Map<String, dynamic> userData = {};
+  String collectedDosen = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _readData().then((data) {
+      setState(() {
+        userData = data;
+        textController.updateDosen(data['nimNip']);
+      });
+    });
+  }
+
+  Future<Map<String, dynamic>> _readData() async {
+    String value = await storage.read(key: 'user') ?? '{}';
+    try {
+      Map<String, dynamic> data = jsonDecode(value);
+      return data;
+    } catch (e) {
+      print('Error parsing JSON: $e');
+      return {};
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +59,33 @@ class HomePageDosen extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Container(
-                child: Text(
-                  'Hello,\nDosen 1 Informatika',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 24,
-                    fontWeight: semiBold,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
+              child: FutureBuilder<Map<String, dynamic>>(
+                future: _readData(), // Read the data from secure storage
+                builder: (BuildContext context,
+                    AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error.toString()}');
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(); // Show a loading spinner while waiting for the data
+                  }
+
+                  Map<String, dynamic> data = snapshot.data ?? {};
+                  String dosenName = data['name'] ?? 'No name';
+                  collectedDosen = dosenName;
+
+                  return Container(
+                    child: Text(
+                      'Hello,\n$dosenName',
+                      style: blackTextStyle.copyWith(
+                        fontSize: 24,
+                        fontWeight: semiBold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                },
               ),
             ),
             GestureDetector(

@@ -230,18 +230,54 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                                           ListTile(
                                             leading: Icon(Icons.photo_library),
                                             title: Text('Photo Library'),
+                                            // onTap: () async {
+                                            //   FilePickerResult? result =
+                                            //       await FilePicker.platform
+                                            //           .pickFiles(
+                                            //               type: FileType.image);
+                                            //   if (result != null) {
+                                            //     PlatformFile file =
+                                            //         result.files.first;
+                                            //     print(file.name);
+                                            //     // Do something with the file
+                                            //   }
+                                            //   Navigator.pop(context);
+                                            // },
+                                            //                   controller.newChat(
+                                            // textController.nimMahasiswa.value,
+                                            // widget.nipDosen,
+                                            // widget.chatId,
+                                            // controller.chatC.text);
                                             onTap: () async {
+                                              // Use FilePicker to let the user pick an image file
                                               FilePickerResult? result =
                                                   await FilePicker.platform
                                                       .pickFiles(
-                                                          type: FileType.image);
+                                                type: FileType.image,
+                                              );
+
                                               if (result != null) {
+                                                // Get the file from the result
                                                 PlatformFile file =
                                                     result.files.first;
-                                                print(file.name);
-                                                // Do something with the file
+
+                                                // Assuming uploadImage is modified to accept a file path
+                                                await controller.uploadImage(
+                                                  widget.chatId,
+                                                  textController
+                                                      .nimMahasiswa.value,
+                                                  widget.nipDosen,
+                                                  // file.path!, // Pass the file path to uploadImage
+                                                );
+
+                                                // Optionally, handle the upload result here
+
+                                                Navigator.pop(
+                                                    context); // Close the dialog or navigator that's open
+                                              } else {
+                                                // User canceled the picker
+                                                print("No file selected.");
                                               }
-                                              Navigator.pop(context);
                                             },
                                           ),
                                           ListTile(

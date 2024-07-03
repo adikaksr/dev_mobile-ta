@@ -7,6 +7,7 @@ import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_dropdown.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import '../../controller/login_controller.dart';
 import '../../shared/theme.dart';
@@ -25,6 +26,12 @@ class _LoginPageState extends State<LoginPage> {
   final passwordInput = TextEditingController();
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
       GlobalKey<ScaffoldMessengerState>();
+
+  void loginUser(String userType) async {
+    final storage = FlutterSecureStorage();
+    await storage.write(key: 'userType', value: userType);
+    // Proceed with the rest of the login process
+  }
 
   void handleLogin() async {
     String nimNip = idInput.text;
@@ -47,15 +54,20 @@ class _LoginPageState extends State<LoginPage> {
 
       // Hide the loading indicator
       _scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+
       if (data) {
         if (role == 'Mahasiswa') {
           Navigator.pushReplacementNamed(context, '/main');
+          loginUser('Mahasiswa');
         } else if (role == 'Dosen') {
           Navigator.pushReplacementNamed(context, '/main-dosen');
+          loginUser('Dosen');
         } else if (role == 'Koordinator TA') {
           Navigator.pushReplacementNamed(context, '/main-koorta');
+          loginUser('Koordinator TA');
         } else if (role == 'Operator') {
           Navigator.pushReplacementNamed(context, '/main-operator');
+          loginUser('Operator');
         }
       } else {
         // Show an error message

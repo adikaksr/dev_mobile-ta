@@ -18,13 +18,37 @@ class _SplashPageState extends State<SplashPage> {
     _navigateUser();
   }
 
+  // void _navigateUser() async {
+  //   final storage = FlutterSecureStorage();
+  //   String? isLoggedIn = await storage.read(key: 'user');
+
+  //   if (isLoggedIn != null && isLoggedIn.isNotEmpty) {
+  //     Timer(Duration(seconds: 3), () {
+  //       Navigator.pushReplacementNamed(context, '/main');
+  //     });
+  //   } else {
+  //     Timer(Duration(seconds: 3), () {
+  //       Navigator.pushNamed(context, '/login-page');
+  //     });
+  //   }
+  // }
+
   void _navigateUser() async {
     final storage = FlutterSecureStorage();
     String? isLoggedIn = await storage.read(key: 'user');
+    String? userType = await storage.read(key: 'userType');
 
     if (isLoggedIn != null && isLoggedIn.isNotEmpty) {
       Timer(Duration(seconds: 3), () {
-        Navigator.pushReplacementNamed(context, '/main');
+        if (userType == 'Dosen') {
+          Navigator.pushReplacementNamed(context, '/main-dosen');
+        } else if (userType == 'Mahasiswa') {
+          Navigator.pushReplacementNamed(context, '/main');
+        } else if (userType == 'Operator') {
+          Navigator.pushReplacementNamed(context, '/main-operator');
+        } else if (userType == 'Koordinator TA') {
+          Navigator.pushReplacementNamed(context, '/main-koorta');
+        }
       });
     } else {
       Timer(Duration(seconds: 3), () {

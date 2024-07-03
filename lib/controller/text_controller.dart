@@ -6,9 +6,14 @@ class TextController extends GetxController {
   var nipDospem1 = ''.obs;
   var nipDospem2 = ''.obs;
   var nimMahasiswa = ''.obs;
+  var nipDosen = ''.obs;
 
   // Function to update the value of myData
   void updateData(String collectedNim) {
     nimMahasiswa.value = collectedNim;
+  }
+
+  void updateDosen(String collectedDosen) {
+    nipDosen.value = collectedDosen;
   }
 }
