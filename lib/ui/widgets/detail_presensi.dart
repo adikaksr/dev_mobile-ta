@@ -32,7 +32,9 @@ class DetailPresensi extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CircleAvatar(),
+          CircleAvatar(
+            backgroundImage: AssetImage('assets/Acatar.png'),
+          ),
           SizedBox(width: 12),
           Flexible(
             flex: 10,

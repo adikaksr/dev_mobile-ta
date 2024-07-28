@@ -1,11 +1,9 @@
 import 'package:easkripsi/cubit/page_cubit.dart';
 import 'package:easkripsi/ui/pages/bimbingan_page.dart';
-import 'package:easkripsi/ui/pages/form_page.dart';
 import 'package:easkripsi/ui/pages/home_page.dart';
-import 'package:easkripsi/ui/pages/jadwal_page.dart';
 import 'package:easkripsi/ui/pages/kehadiran_page.dart';
+import 'package:easkripsi/ui/pages/pilih_seminar_form_page.dart';
 import 'package:easkripsi/ui/pages/pilih_seminar_page.dart';
-import 'package:easkripsi/ui/pages/test_data.dart';
 import 'package:easkripsi/ui/widgets/custom_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,13 +19,13 @@ class MainPage extends StatelessWidget {
         case 0:
           return HomePage();
         case 1:
-          return const FormPage();
+          return const PilihSeminarFormPage();
         case 2:
           return const BimbinganPage();
         case 3:
           return const PilihSeminarPage();
-        case 4:
-          return const KehadiranPage();
+        // case 4:
+        //   return const KehadiranPage();
         default:
           return HomePage();
       }
@@ -74,12 +72,12 @@ class MainPage extends StatelessWidget {
                 context: context,
               ),
               //KEHADIRAN
-              CustomBottomNavigation(
-                index: 4,
-                iconKey: 'kehadiran',
-                title: 'Kehadiran',
-                context: context,
-              ),
+              // CustomBottomNavigation(
+              //   index: 4,
+              //   iconKey: 'kehadiran',
+              //   title: 'Kehadiran',
+              //   context: context,
+              // ),
             ],
           ),
         ),
