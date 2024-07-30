@@ -1,19 +1,21 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../controller/file_controller.dart';
 import '../../shared/theme.dart';
 
 class CustomFilePicker extends StatelessWidget {
   final String title;
-  final File? file;
+
   final Function() pickFile;
-  const CustomFilePicker({
+  CustomFilePicker({
     super.key,
     required this.title,
-    required this.file,
     required this.pickFile,
   });
+  final fileController = Get.find<FileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +47,17 @@ class CustomFilePicker extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  child: Text(
-                    file == null
-                        ? '-Pilih File-' // If no file is selected
-                        : 'File: ${file!.path.split('/').last}',
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  child: Obx(() => Text(
+                        fileController.fileName.value == ''
+                            ? '-Pilih File-' // If no file is selected
+                            : fileController.fileName.value,
+                        overflow: TextOverflow.ellipsis,
+                      )),
                 ),
                 ElevatedButton(
-                  onPressed: pickFile,
+                  onPressed: () {
+                    pickFile();
+                  },
                   child: Text(
                     'Upload',
                     style: TextStyle(

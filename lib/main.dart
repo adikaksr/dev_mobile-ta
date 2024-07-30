@@ -1,6 +1,7 @@
 import 'package:easkripsi/controller/bimbingan_controller.dart';
 import 'package:easkripsi/controller/bimbingan_dosen_controller.dart';
 import 'package:easkripsi/controller/chat_room_controller.dart';
+import 'package:easkripsi/controller/file_controller.dart';
 import 'package:easkripsi/controller/text_controller.dart';
 import 'package:easkripsi/cubit/page_cubit.dart';
 import 'package:easkripsi/firebase_options.dart';
@@ -31,6 +32,7 @@ void main() async {
 
   Get.put(TextController());
   Get.put(BimbinganController());
+  Get.put(FileController());
   // Get.put(BimbinganDosenController());
   runApp(const MyApp());
 }

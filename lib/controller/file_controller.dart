@@ -1,15 +1,31 @@
-// import 'dart:io';
+import 'dart:io';
 
-// import 'package:file_picker/file_picker.dart';
-// import 'package:get/get.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:get/get.dart';
 
-// class FileController extends GetxController{
-//   Future<void> pickFileJIF01() async {
-//     final result = await FilePicker.platform.pickFiles();
-//     if (result != null) {
-//        {
-//         _fileJIF01 = File(result.files.single.path!);
-//       };
-//     }
-//   }
-// }
+class FileController extends GetxController {
+  var fileName = ''.obs;
+
+  void uploadfile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+
+      fileName.value = result.files.single.name;
+
+      try {
+        await firebase_storage.FirebaseStorage.instance
+            .ref('uploads/$fileName')
+            .putFile(file);
+        print(fileName);
+      } on firebase_storage.FirebaseStorage catch (e) {
+        print(e);
+      }
+    } else {
+      // User canceled the picker
+    }
+  }
+}
