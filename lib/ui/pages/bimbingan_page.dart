@@ -119,7 +119,15 @@ class _BimbinganPageState extends State<BimbinganPage> {
             var chatData = snapshot.data!.docs;
 
             if (chatData.isEmpty) {
-              return const Center(child: Text('Belum ada bimbingan tersedia!'));
+              return Center(
+                child: Text(
+                  'Belum ada bimbingan tersedia!',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: bold,
+                  ),
+                ),
+              );
             } else {
               return ListView.builder(
                 itemCount: chatData.length,

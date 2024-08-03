@@ -149,7 +149,7 @@ class ChatRoomController extends GetxController {
             .doc(chatId)
             .collection("chat")
             .where("isRead", isEqualTo: false)
-            .where("pengirim", isEqualTo: nipDosen)
+            .where("pengirim", isEqualTo: nimNip)
             .get();
 
         //total unread for dosen

@@ -7,8 +7,9 @@ import 'package:get/get.dart';
 
 class FileController extends GetxController {
   var fileName = ''.obs;
+  // var displayName = ''.obs;
 
-  void uploadfile() async {
+  void uploadFile(String fileType, RxString name) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
@@ -18,8 +19,9 @@ class FileController extends GetxController {
 
       try {
         await firebase_storage.FirebaseStorage.instance
-            .ref('uploads/$fileName')
+            .ref('uploads/$fileType/${fileName.value}')
             .putFile(file);
+        name.value = fileName.value;
         print(fileName);
       } on firebase_storage.FirebaseStorage catch (e) {
         print(e);
@@ -27,5 +29,9 @@ class FileController extends GetxController {
     } else {
       // User canceled the picker
     }
+  }
+
+  void storeData() {
+    // Store data to firestore
   }
 }

@@ -1,41 +1,41 @@
 [
   {
-    "date": "2024-07-29",
+    "date": "2024-08-05",
     "time": "08:00-10:00",
     "presensi": {
-      "dosen": "Dosen 1 Informatika",
+      "dosen": "Viska Mutiawani B.IT, M.IT",
       "status": "Present"
     }
   },
   {
-    "date": "2024-07-29",
+    "date": "2024-08-05",
     "time": "08:00-10:00",
     "presensi": {
-      "dosen": "Dosen 2 Informatika",
+      "dosen": "Alim Misbullah S.Si., M.S",
       "status": "Absent"
     }
   },
   {
-    "date": "2024-07-29",
+    "date": "2024-08-05",
     "time": "08:00-10:00",
     "presensi": {
-      "dosen": "Dosen 3 Informatika",
+      "dosen": "Nazaruddin S.Si., M.Sc.",
       "status": "Pending"
     }
   },
   {
-    "date": "2024-07-29",
+    "date": "2024-08-05",
     "time": "08:00-10:00",
     "presensi": {
-      "dosen": "Dosen 4 Informatika",
+      "dosen": "Zulfan S.Si., M.Sc.",
       "status": "Present"
     }
   },
   {
-    "date": "2024-07-29",
+    "date": "2024-08-05",
     "time": "08:00-10:00",
     "presensi": {
-      "dosen": "Dosen 5 Informatika",
+      "dosen": "Rini Deviani, M.Eng.",
       "status": "Present"
     }
   },

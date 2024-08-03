@@ -13,6 +13,7 @@ import 'package:easkripsi/ui/pages/home_page.dart';
 import 'package:easkripsi/ui/pages/jadwal_page.dart';
 import 'package:easkripsi/ui/pages/kehadiran_page.dart';
 import 'package:easkripsi/ui/pages/koordinator%20ta/koordinator_ta_page.dart';
+import 'package:easkripsi/ui/pages/koordinator%20ta/main_page_koorta.dart';
 import 'package:easkripsi/ui/pages/login_page.dart';
 import 'package:easkripsi/ui/pages/main_page.dart';
 import 'package:easkripsi/ui/pages/operator/operator_page.dart';
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
           '/second-form': (context) => SecondFormPage(),
           // '/chat-room': (context) => ChatRoomPage(),
           '/main-dosen': (context) => const MainPageDosen(),
-          '/main-koorta': (context) => KoordinatorTAPage(),
+          '/main-koorta': (context) => MainPageKoorta(),
           '/main-operator': (context) => OperatorPage(),
         },
       ),
