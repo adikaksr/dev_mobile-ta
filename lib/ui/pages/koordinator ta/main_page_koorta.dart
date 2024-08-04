@@ -5,6 +5,7 @@ import 'package:easkripsi/ui/pages/dosen/daftar_mahasiswa_page.dart';
 import 'package:easkripsi/ui/pages/dosen/home_page_dosen.dart';
 import 'package:easkripsi/ui/pages/home_page.dart';
 import 'package:easkripsi/ui/pages/jadwal_page.dart';
+import 'package:easkripsi/ui/pages/koordinator%20ta/daftar_berkas_mahasiswa_page.dart';
 import 'package:easkripsi/ui/pages/koordinator%20ta/home_page_koorta.dart';
 import 'package:easkripsi/ui/widgets/custom_bottom_navigation.dart';
 import 'package:flutter/material.dart';
@@ -21,11 +22,7 @@ class MainPageKoorta extends StatelessWidget {
         case 0:
           return const HomePageKoorta();
         case 1:
-          return DaftarMahasiswaPage();
-        case 2:
-          return const BimbinganPage();
-        case 3:
-          return const JadwalPage();
+          return DaftarBerkasMahasiswaPage();
         default:
           return HomePage();
       }
@@ -55,20 +52,6 @@ class MainPageKoorta extends StatelessWidget {
                 index: 1,
                 iconKey: 'mahasiswa',
                 title: 'Mahasiswa',
-                context: context,
-              ),
-              //BIMBINGAN
-              CustomBottomNavigation(
-                index: 2,
-                iconKey: 'bimbingan',
-                title: 'Bimbingan',
-                context: context,
-              ),
-              //JADWAL
-              CustomBottomNavigation(
-                index: 3,
-                iconKey: 'jadwal',
-                title: 'Jadwal',
                 context: context,
               ),
             ],

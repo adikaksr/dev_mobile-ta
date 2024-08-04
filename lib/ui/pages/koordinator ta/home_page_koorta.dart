@@ -144,13 +144,7 @@ class _HomePageKoortaState extends State<HomePageKoorta> {
                         width: 150,
                         height: 38,
                         child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BimbinganPage()),
-                            );
-                          },
+                          onPressed: () {},
                           style: TextButton.styleFrom(
                             backgroundColor: kWhiteColor,
                             shape: RoundedRectangleBorder(

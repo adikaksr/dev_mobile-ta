@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controller/file_controller.dart';
 
-class CustomFilePicker extends StatelessWidget {
+class KoorOpenfileSempro extends StatelessWidget {
   final fileController = Get.find<FileController>();
 
   @override
@@ -118,32 +118,17 @@ class FilePickerButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  child: Obx(() => Text(
-                        name.value.isEmpty ? '-Pilih File-' : name.value,
-                        overflow: TextOverflow.ellipsis,
+                  child: Obx(() => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text(
+                          name.value.isEmpty ? 'Tidak ada file' : name.value,
+                          overflow: TextOverflow.ellipsis,
+                          style: blackTextStyle.copyWith(
+                            fontSize: 14,
+                            fontWeight: light,
+                          ),
+                        ),
                       )),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    fileController.uploadFile(fileType, name);
-                  },
-                  child: Text(
-                    'Upload',
-                    style: grayTextStyle.copyWith(
-                      fontSize: 14.0,
-                      fontWeight: medium,
-                    ),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    side: MaterialStateProperty.all(
-                        BorderSide(color: Colors.grey, width: 1.0)),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                  ),
                 ),
               ],
             ),
