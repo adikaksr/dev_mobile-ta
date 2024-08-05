@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easkripsi/controller/koorta_controller.dart';
 import 'package:easkripsi/ui/pages/akun_page.dart';
 import 'package:easkripsi/ui/pages/bimbingan_page.dart';
+import 'package:easkripsi/ui/pages/koordinator%20ta/daftar_berkas_mahasiswa_page.dart';
+import 'package:easkripsi/ui/pages/koordinator%20ta/pilih_seminar_mahasiswa_page.dart';
 import 'package:easkripsi/ui/widgets/mahasiswa_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -10,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import '../../../controller/text_controller.dart';
 import '../../../shared/theme.dart';
+import '../../widgets/berkas_mahasiswa.dart';
 
 class HomePageKoorta extends StatefulWidget {
   const HomePageKoorta({super.key});
@@ -20,6 +25,7 @@ class HomePageKoorta extends StatefulWidget {
 
 class _HomePageKoortaState extends State<HomePageKoorta> {
   final TextController textController = Get.put(TextController());
+  final KoortaController koortaController = Get.find<KoortaController>();
   final firestore = FirebaseFirestore.instance;
   final storage = new FlutterSecureStorage();
   Map<String, dynamic> userData = {};
@@ -199,27 +205,58 @@ class _HomePageKoortaState extends State<HomePageKoorta> {
                 fontWeight: semiBold,
               ),
             ),
-            const MahasiswaTile(
-              name: 'Mahasiswa 1',
-              status: '1808107010001',
-              imageUrl: 'assets/Acatar.png',
+            SizedBox(
+              height: 15,
             ),
-            const MahasiswaTile(
-              name: 'Mahasiswa 2',
-              status: '1808107010002',
-              imageUrl: 'assets/Acatar.png',
-            ),
-            const MahasiswaTile(
-              name: 'Mahasiswa 3',
-              status: '1808107010003',
-              imageUrl: 'assets/Acatar.png',
+            Container(
+              height: 200, // Ensure the container has a defined height
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: koortaController.getMahasiswa(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(
+                      child: Text('No Mahasiswa with berkas found'),
+                    );
+                  }
+                  var mahasiswaWithBerkas = snapshot.data!;
+                  int itemCount = min(mahasiswaWithBerkas.length, 3);
+                  return ListView.builder(
+                    itemCount: itemCount,
+                    itemBuilder: (context, index) {
+                      var data = mahasiswaWithBerkas[index];
+                      return InkWell(
+                        onTap: () {
+                          var selectedMahasiswa = mahasiswaWithBerkas
+                              .where((mahasiswa) =>
+                                  mahasiswa['nimNip'] == data['nimNip'])
+                              .toList();
+                          Get.to(() => PilihSeminarMahasiswaPage(
+                              mahasiswaWithBerkas: selectedMahasiswa));
+                        },
+                        child: BerkasMahasiswa(
+                          name: data['name'],
+                          status: data['nimNip'],
+                          imageUrl: 'assets/Acatar.png',
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
             SizedBox(
               height: 20,
             ),
             Center(
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => const DaftarBerkasMahasiswaPage());
+                },
                 child: Text(
                   'Lihat selengkapnya',
                   style: blueTextStyle.copyWith(

@@ -17,8 +17,13 @@ class DaftarBerkasMahasiswaPage extends GetView<KoortaController> {
         title: Text('Daftar Mahasiswa'),
       ),
       body: Container(
+        margin: const EdgeInsets.only(
+          top: 5,
+          left: 20,
+          right: 20,
+        ),
         color: kBGColor,
-        child: FutureBuilder<List<DocumentSnapshot<Map<String, dynamic>>>>(
+        child: FutureBuilder<List<Map<String, dynamic>>>(
           future: controller.getMahasiswa(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -32,20 +37,22 @@ class DaftarBerkasMahasiswaPage extends GetView<KoortaController> {
               );
             }
             var mahasiswaWithBerkas = snapshot.data!;
-            print(mahasiswaWithBerkas.length);
+            // print(mahasiswaWithBerkas[0].data());
             return ListView.builder(
               itemCount: mahasiswaWithBerkas.length,
               itemBuilder: (context, index) {
-                var data = mahasiswaWithBerkas[index].data()!;
-                var mahasiswaID = mahasiswaWithBerkas[index].id;
+                var data = mahasiswaWithBerkas[index];
+                // var mahasiswaID = mahasiswaWithBerkas[index].id;
                 return InkWell(
                   onTap: () {
-                    Get.to(() => const PilihSeminarMahasiswaPage());
+                    var selectedMahasiswa = mahasiswaWithBerkas
+                        .where((mahasiswa) =>
+                            mahasiswa['nimNip'] == data['nimNip'])
+                        .toList();
+                    Get.to(() => PilihSeminarMahasiswaPage(
+                        mahasiswaWithBerkas: selectedMahasiswa));
                   },
                   child: BerkasMahasiswa(
-                    // name: data['name'],
-                    // status: data['status'],
-                    // imageUrl: data['imageUrl'],
                     name: data['name'],
                     status: data['nimNip'],
                     imageUrl: 'assets/Acatar.png',

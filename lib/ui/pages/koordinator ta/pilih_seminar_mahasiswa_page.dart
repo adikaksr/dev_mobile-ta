@@ -4,12 +4,16 @@ import 'package:easkripsi/ui/pages/second_form_page.dart';
 import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 import '../../../shared/theme.dart';
 import '../../shared/theme.dart';
 
 class PilihSeminarMahasiswaPage extends StatelessWidget {
-  const PilihSeminarMahasiswaPage({super.key});
+  final List<Map<String, dynamic>> mahasiswaWithBerkas;
+  const PilihSeminarMahasiswaPage(
+      {super.key, required this.mahasiswaWithBerkas});
 
   // final _formKey = GlobalKey<FormState>();
 
@@ -49,11 +53,9 @@ class PilihSeminarMahasiswaPage extends StatelessWidget {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SemproMahasiswaPage()),
-                  );
+                  Get.to(() => SemproMahasiswaPage(
+                        mahasiswaWithBerkas: mahasiswaWithBerkas,
+                      ));
                 },
                 child: Row(
                   mainAxisAlignment:
@@ -91,11 +93,7 @@ class PilihSeminarMahasiswaPage extends StatelessWidget {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SemproMahasiswaPage()),
-                  );
+                  // SEMINAR HASIL
                 },
                 child: Row(
                   mainAxisAlignment:
@@ -133,10 +131,7 @@ class PilihSeminarMahasiswaPage extends StatelessWidget {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => JadwalPage()),
-                  );
+                  // SIDANG
                 },
                 child: Row(
                   mainAxisAlignment:

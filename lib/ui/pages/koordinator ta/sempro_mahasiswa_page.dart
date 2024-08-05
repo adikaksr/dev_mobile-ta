@@ -14,7 +14,8 @@ import '../../../shared/theme.dart';
 import '../../shared/theme.dart';
 
 class SemproMahasiswaPage extends StatefulWidget {
-  const SemproMahasiswaPage({super.key});
+  final List<Map<String, dynamic>> mahasiswaWithBerkas;
+  const SemproMahasiswaPage({super.key, required this.mahasiswaWithBerkas});
 
   @override
   State<SemproMahasiswaPage> createState() => _SemproMahasiswaPageState();
@@ -35,6 +36,7 @@ class _SemproMahasiswaPageState extends State<SemproMahasiswaPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.mahasiswaWithBerkas);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -64,7 +66,9 @@ class _SemproMahasiswaPageState extends State<SemproMahasiswaPage> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    KoorOpenfileSempro(),
+                    KoorOpenfileSempro(
+                      mahasiswaWithBerkas: widget.mahasiswaWithBerkas,
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 30,
