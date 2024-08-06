@@ -36,7 +36,7 @@ void main() async {
   Get.put(BimbinganController());
   Get.put(FileController());
   Get.put(KoortaController());
-  // Get.put(BimbinganDosenController());
+  Get.put(BimbinganDosenController());
   runApp(const MyApp());
 }
 

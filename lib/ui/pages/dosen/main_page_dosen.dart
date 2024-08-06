@@ -22,7 +22,7 @@ class MainPageDosen extends StatelessWidget {
         case 1:
           return DaftarMahasiswaPage();
         case 2:
-          return const BimbinganPage();
+          return const BimbinganPageDosen();
         case 3:
           return const JadwalPage();
         default:

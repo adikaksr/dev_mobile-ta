@@ -86,8 +86,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                   // print(snapshot.data!.docs.length);
                   if (snapshot.data == null || !snapshot.hasData) {
                     return Center(
-                        child:
-                            CircularProgressIndicator()); // or some other widget to show loading or empty state
+                      child: CircularProgressIndicator(),
+                    ); // or some other widget to show loading or empty state
                   }
                   var alldata = snapshot.data!.docs;
                   Timer(
@@ -158,8 +158,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     );
                   }
                   return Center(
-                    child: CircularProgressIndicator(),
-                  );
+                      // child: CircularProgressIndicator(),
+                      );
                 },
               ),
             ),
@@ -194,10 +194,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                       autocorrect: false,
                       controller: controller.chatC,
                       onEditingComplete: () => controller.newChat(
-                          textController.nimMahasiswa.value,
-                          widget.nipDosen,
-                          widget.chatId,
-                          controller.chatC.text),
+                        textController.nimMahasiswa.value,
+                        widget.nipDosen,
+                        widget.chatId,
+                        controller.chatC.text,
+                      ),
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
                           onPressed: () {
@@ -319,10 +320,11 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     borderRadius: BorderRadius.circular(100),
                     onTap: () {
                       controller.newChat(
-                          textController.nimMahasiswa.value,
-                          widget.nipDosen,
-                          widget.chatId,
-                          controller.chatC.text);
+                        textController.nimMahasiswa.value,
+                        widget.nipDosen,
+                        widget.chatId,
+                        controller.chatC.text,
+                      );
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),

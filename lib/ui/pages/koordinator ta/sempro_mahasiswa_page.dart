@@ -75,17 +75,7 @@ class _SemproMahasiswaPageState extends State<SemproMahasiswaPage> {
                         bottom: 45.0,
                         left: 8,
                       ),
-                      child: CustomButton(
-                          title: 'Selesai',
-                          onPressed: () {
-                            // if (_formKey.currentState != null &&
-                            //     _formKey.currentState!.validate()) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SecondFormPage()),
-                            );
-                          }),
+                      child: CustomButton(title: 'Selesai', onPressed: () {}),
                     ),
                   ],
                 ),

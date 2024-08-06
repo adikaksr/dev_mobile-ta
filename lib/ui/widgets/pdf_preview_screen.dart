@@ -40,17 +40,39 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
     }
   }
 
+  // void _openFile(BuildContext context, String url) async {
+  //   final Uri uri = Uri.parse(url);
+  //   if (await canLaunchUrl(uri)) {
+  //     await launchUrl(
+  //       uri,
+  //       // mode: LaunchMode.externalApplication,
+  //       // webViewConfiguration:
+  //       //     const WebViewConfiguration(enableJavaScript: false),
+  //     );
+  //   } else {
+  //     throw 'Could not launch $url';
+  //   }
+  // }
+
   void _openFile(BuildContext context, String url) async {
     final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(
-        uri,
-        // mode: LaunchMode.externalApplication,
-        // webViewConfiguration:
-        //     const WebViewConfiguration(enableJavaScript: false),
+    try {
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        // Fallback to in-app web view if external application launch fails
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.inAppWebView);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Could not launch $url')),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
       );
-    } else {
-      throw 'Could not launch $url';
     }
   }
 
