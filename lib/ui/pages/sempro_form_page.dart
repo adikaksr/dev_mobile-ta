@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:easkripsi/controller/file_controller.dart';
+import 'package:easkripsi/ui/pages/home_page.dart';
 import 'package:easkripsi/ui/pages/second_form_page.dart';
 import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_filepicker.dart';
@@ -30,6 +31,16 @@ class _SemproFormPageState extends State<SemproFormPage> {
   //     });
   //   }
   // }
+
+  Future<void> snackback() async {
+    await Future.delayed(Duration.zero, () {
+      Get.back();
+    });
+    Get.snackbar(
+      'Selesai',
+      'File telah berhasil diupload',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,16 +81,11 @@ class _SemproFormPageState extends State<SemproFormPage> {
                         left: 8,
                       ),
                       child: CustomButton(
-                          title: 'Selesai',
-                          onPressed: () {
-                            // if (_formKey.currentState != null &&
-                            //     _formKey.currentState!.validate()) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SecondFormPage()),
-                            );
-                          }),
+                        title: 'Selesai',
+                        onPressed: () {
+                          snackback();
+                        },
+                      ),
                     ),
                   ],
                 ),
