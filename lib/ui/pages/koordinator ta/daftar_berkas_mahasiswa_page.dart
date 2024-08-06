@@ -38,6 +38,7 @@ class DaftarBerkasMahasiswaPage extends GetView<KoortaController> {
             }
             var mahasiswaWithBerkas = snapshot.data!;
             // print(mahasiswaWithBerkas[0].data());
+            mahasiswaWithBerkas.sort((a, b) => a['name'].compareTo(b['name']));
             return ListView.builder(
               itemCount: mahasiswaWithBerkas.length,
               itemBuilder: (context, index) {

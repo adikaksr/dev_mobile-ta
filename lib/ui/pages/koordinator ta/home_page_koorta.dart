@@ -209,7 +209,7 @@ class _HomePageKoortaState extends State<HomePageKoorta> {
               height: 15,
             ),
             Container(
-              height: 200, // Ensure the container has a defined height
+              height: 300, // Ensure the container has a defined height
               child: FutureBuilder<List<Map<String, dynamic>>>(
                 future: koortaController.getMahasiswa(),
                 builder: (context, snapshot) {
@@ -224,6 +224,8 @@ class _HomePageKoortaState extends State<HomePageKoorta> {
                     );
                   }
                   var mahasiswaWithBerkas = snapshot.data!;
+                  mahasiswaWithBerkas
+                      .sort((a, b) => a['name'].compareTo(b['name']));
                   int itemCount = min(mahasiswaWithBerkas.length, 3);
                   return ListView.builder(
                     itemCount: itemCount,

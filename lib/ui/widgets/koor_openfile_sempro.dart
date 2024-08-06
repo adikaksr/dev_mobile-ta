@@ -1,71 +1,72 @@
 import 'package:easkripsi/shared/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../../controller/file_controller.dart';
 
 class KoorOpenfileSempro extends StatelessWidget {
-  // final fileController = Get.find<FileController>();
   final List<Map<String, dynamic>> mahasiswaWithBerkas;
 
   const KoorOpenfileSempro({super.key, required this.mahasiswaWithBerkas});
 
   @override
   Widget build(BuildContext context) {
-    print('OpenFile: ${mahasiswaWithBerkas[0]}');
+    Map<String, String> fileNames = {};
+    for (var berkas in mahasiswaWithBerkas[0]['berkas']) {
+      fileNames[berkas['id']] = berkas['fileName'];
+    }
+
     return Column(
       children: [
         FilePickerButton(
           fileType: 'JIF-01',
-          name: ''.obs,
+          name: fileNames['JIF-01'] ?? '',
         ),
         const SizedBox(
           height: 12.0,
         ),
         FilePickerButton(
           fileType: 'JIF-02',
-          name: ''.obs,
+          name: fileNames['JIF-02'] ?? '',
         ),
         const SizedBox(
           height: 12.0,
         ),
         FilePickerButton(
           fileType: 'PEN-01',
-          name: ''.obs,
+          name: fileNames['PEN-01'] ?? '',
         ),
         const SizedBox(
           height: 12.0,
         ),
         FilePickerButton(
           fileType: 'PEN-02',
-          name: ''.obs,
+          name: fileNames['PEN-02'] ?? '',
         ),
         const SizedBox(
           height: 12.0,
         ),
         FilePickerButton(
           fileType: 'KRS',
-          name: ''.obs,
+          name: fileNames['KRS'] ?? '',
         ),
         const SizedBox(
           height: 12.0,
         ),
         FilePickerButton(
           fileType: 'Transkrip Sementara',
-          name: ''.obs,
+          name: fileNames['Transkrip Sementara'] ?? '',
         ),
         const SizedBox(
           height: 12.0,
         ),
         FilePickerButton(
           fileType: 'Berkas Proposal',
-          name: ''.obs,
+          name: fileNames['Berkas Proposal'] ?? '',
         ),
         const SizedBox(
           height: 12.0,
         ),
         FilePickerButton(
           fileType: 'Bukti Kehadiran',
-          name: ''.obs,
+          name: fileNames['Bukti Kehadiran'] ?? '',
         ),
         // Add more buttons for other file types as needed
       ],
@@ -75,10 +76,11 @@ class KoorOpenfileSempro extends StatelessWidget {
 
 class FilePickerButton extends StatelessWidget {
   final String fileType;
-  final RxString name;
+  final String name;
   // final FileController fileController;
 
-  FilePickerButton({
+  const FilePickerButton({
+    super.key,
     required this.fileType,
     // required this.fileController,
     required this.name,
@@ -114,17 +116,17 @@ class FilePickerButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
-                  child: Obx(() => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text(
-                          name.value.isEmpty ? 'Tidak ada file' : name.value,
-                          overflow: TextOverflow.ellipsis,
-                          style: blackTextStyle.copyWith(
-                            fontSize: 14,
-                            fontWeight: light,
-                          ),
-                        ),
-                      )),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Text(
+                      name.isEmpty ? 'Tidak ada file' : name,
+                      overflow: TextOverflow.ellipsis,
+                      style: blackTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: light,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
