@@ -90,6 +90,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                     ); // or some other widget to show loading or empty state
                   }
                   var alldata = snapshot.data!.docs;
+
                   Timer(
                     Duration.zero,
                     () {
@@ -157,9 +158,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
                       },
                     );
                   }
-                  return Center(
-                      // child: CircularProgressIndicator(),
-                      );
+                  return const Center();
                 },
               ),
             ),
