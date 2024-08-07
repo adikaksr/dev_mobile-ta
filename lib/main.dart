@@ -1,6 +1,7 @@
 import 'package:easkripsi/controller/bimbingan_controller.dart';
 import 'package:easkripsi/controller/bimbingan_dosen_controller.dart';
 import 'package:easkripsi/controller/chat_room_controller.dart';
+import 'package:easkripsi/controller/daftar_mahasiswa_controller.dart';
 import 'package:easkripsi/controller/file_controller.dart';
 import 'package:easkripsi/controller/koorta_controller.dart';
 import 'package:easkripsi/controller/text_controller.dart';
@@ -37,6 +38,7 @@ void main() async {
   Get.put(FileController());
   Get.put(KoortaController());
   Get.put(BimbinganDosenController());
+  Get.put(DaftarMahasiswaController());
   runApp(const MyApp());
 }
 

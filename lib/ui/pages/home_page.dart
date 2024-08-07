@@ -31,6 +31,9 @@ class _HomePageState extends State<HomePage> {
   final TextController textController = Get.put(TextController());
   Dosen? currentDosen;
   Dosen? currentDosen2;
+  Dosen? currentDospeng1;
+  Dosen? currentDospeng2;
+  Dosen? currentDospeng3;
   final firestore = FirebaseFirestore.instance;
   final storage = new FlutterSecureStorage();
   Map<String, dynamic> userData = {};

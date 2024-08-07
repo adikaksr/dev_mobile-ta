@@ -1,17 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easkripsi/controller/text_controller.dart';
 import 'package:easkripsi/shared/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../../controller/daftar_mahasiswa_controller.dart';
 import '../../widgets/mahasiswa_tile.dart';
 
-class DaftarMahasiswaPage extends StatelessWidget {
-  final List<Mahasiswa> mahasiswaList = [
-    Mahasiswa(
-        name: 'Mahasiswa 1', status: 'Status 1', imageUrl: 'assets/Acatar.png'),
-    Mahasiswa(
-        name: 'Mahasiswa 2', status: 'Status 2', imageUrl: 'assets/Acatar.png'),
-    Mahasiswa(
-        name: 'Mahasiswa 3', status: 'Status 3', imageUrl: 'assets/Acatar.png'),
-    // Add more mahasiswa here
-  ];
+class DaftarMahasiswaPage extends GetView<DaftarMahasiswaController> {
+  final TextController textController = Get.find<TextController>();
 
   DaftarMahasiswaPage({super.key});
 
@@ -22,14 +18,38 @@ class DaftarMahasiswaPage extends StatelessWidget {
         title: Text('Daftar Mahasiswa'),
       ),
       body: Container(
+        margin: const EdgeInsets.only(
+          top: 0,
+          left: 20,
+          right: 20,
+        ),
         color: kBGColor,
-        child: ListView.builder(
-          itemCount: mahasiswaList.length,
-          itemBuilder: (context, index) {
-            return MahasiswaTile(
-              name: mahasiswaList[index].name,
-              status: mahasiswaList[index].status,
-              imageUrl: mahasiswaList[index].imageUrl,
+        child: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          future: controller.getMahasiswa(textController.nipDosen.value),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return const Center(
+                child: Text('Belum ada mahasiswa'),
+              );
+            }
+            var getMahasiswa = snapshot.data!.docs;
+            getMahasiswa.sort((a, b) => a['name'].compareTo(b['name']));
+            return ListView.builder(
+              itemCount: getMahasiswa.length,
+              itemBuilder: (context, index) {
+                var data = getMahasiswa[index].data();
+
+                return MahasiswaTile(
+                  name: data['name'],
+                  status: data['connection'],
+                  imageUrl: 'assets/Acatar.png',
+                );
+              },
             );
           },
         ),

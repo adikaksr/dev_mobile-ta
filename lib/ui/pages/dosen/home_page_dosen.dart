@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easkripsi/controller/daftar_mahasiswa_controller.dart';
 import 'package:easkripsi/ui/pages/akun_page.dart';
 import 'package:easkripsi/ui/pages/bimbingan_page.dart';
 import 'package:easkripsi/ui/widgets/mahasiswa_tile.dart';
@@ -19,7 +21,10 @@ class HomePageDosen extends StatefulWidget {
 }
 
 class _HomePageDosenState extends State<HomePageDosen> {
-  final TextController textController = Get.put(TextController());
+  final TextController textController = Get.find<TextController>();
+  final DaftarMahasiswaController controller =
+      Get.find<DaftarMahasiswaController>();
+
   final firestore = FirebaseFirestore.instance;
   final storage = new FlutterSecureStorage();
   Map<String, dynamic> userData = {};
@@ -205,20 +210,39 @@ class _HomePageDosenState extends State<HomePageDosen> {
                 fontWeight: semiBold,
               ),
             ),
-            const MahasiswaTile(
-              name: 'Mahasiswa 1',
-              status: '1808107010001',
-              imageUrl: 'assets/Acatar.png',
-            ),
-            const MahasiswaTile(
-              name: 'Mahasiswa 2',
-              status: '1808107010002',
-              imageUrl: 'assets/Acatar.png',
-            ),
-            const MahasiswaTile(
-              name: 'Mahasiswa 3',
-              status: '1808107010003',
-              imageUrl: 'assets/Acatar.png',
+            Container(
+              height: 250,
+              child: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                future: controller.getMahasiswa(textController.nipDosen.value),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(
+                      child: Text('Belum ada mahasiswa'),
+                    );
+                  }
+                  var getMahasiswa = snapshot.data!.docs;
+                  getMahasiswa.sort((a, b) => a['name'].compareTo(b['name']));
+                  int itemCount = min(getMahasiswa.length, 3);
+
+                  return ListView.builder(
+                    itemCount: itemCount,
+                    itemBuilder: (context, index) {
+                      var data = getMahasiswa[index].data();
+
+                      return MahasiswaTile(
+                        name: data['name'],
+                        status: data['connection'],
+                        imageUrl: 'assets/Acatar.png',
+                      );
+                    },
+                  );
+                },
+              ),
             ),
             SizedBox(
               height: 20,
