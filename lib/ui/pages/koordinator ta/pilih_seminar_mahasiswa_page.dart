@@ -1,5 +1,7 @@
 import 'package:easkripsi/ui/pages/jadwal_page.dart';
+import 'package:easkripsi/ui/pages/koordinator%20ta/semhas_mahasiswa_page.dart';
 import 'package:easkripsi/ui/pages/koordinator%20ta/sempro_mahasiswa_page.dart';
+import 'package:easkripsi/ui/pages/koordinator%20ta/sidang_mahasiswa_page.dart';
 import 'package:easkripsi/ui/pages/second_form_page.dart';
 import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
@@ -93,7 +95,9 @@ class PilihSeminarMahasiswaPage extends StatelessWidget {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  // SEMINAR HASIL
+                  Get.to(() => SemhasMahasiswaPage(
+                        mahasiswaWithBerkas: mahasiswaWithBerkas,
+                      ));
                 },
                 child: Row(
                   mainAxisAlignment:
@@ -131,7 +135,9 @@ class PilihSeminarMahasiswaPage extends StatelessWidget {
               ),
               child: ElevatedButton(
                 onPressed: () {
-                  // SIDANG
+                  Get.to(() => SidangMahasiswaPage(
+                        mahasiswaWithBerkas: mahasiswaWithBerkas,
+                      ));
                 },
                 child: Row(
                   mainAxisAlignment:

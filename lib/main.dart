@@ -18,6 +18,7 @@ import 'package:easkripsi/ui/pages/koordinator%20ta/koordinator_ta_page.dart';
 import 'package:easkripsi/ui/pages/koordinator%20ta/main_page_koorta.dart';
 import 'package:easkripsi/ui/pages/login_page.dart';
 import 'package:easkripsi/ui/pages/main_page.dart';
+import 'package:easkripsi/ui/pages/operator/main_page_operator.dart';
 import 'package:easkripsi/ui/pages/operator/operator_page.dart';
 import 'package:easkripsi/ui/pages/second_form_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -68,7 +69,7 @@ class MyApp extends StatelessWidget {
           // '/chat-room': (context) => ChatRoomPage(),
           '/main-dosen': (context) => const MainPageDosen(),
           '/main-koorta': (context) => MainPageKoorta(),
-          '/main-operator': (context) => OperatorPage(),
+          '/main-operator': (context) => MainPageOperator(),
         },
       ),
     );

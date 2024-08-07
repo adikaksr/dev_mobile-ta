@@ -5,6 +5,7 @@ import 'package:easkripsi/ui/pages/second_form_page.dart';
 import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_filepicker.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
+import 'package:easkripsi/ui/widgets/koor_openfile_semhas.dart';
 import 'package:easkripsi/ui/widgets/koor_openfile_sempro.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +14,15 @@ import 'package:get/get.dart';
 import '../../../shared/theme.dart';
 import '../../shared/theme.dart';
 
-class SemproMahasiswaPage extends StatefulWidget {
+class SemhasMahasiswaPage extends StatefulWidget {
   final List<Map<String, dynamic>> mahasiswaWithBerkas;
-  const SemproMahasiswaPage({super.key, required this.mahasiswaWithBerkas});
+  const SemhasMahasiswaPage({super.key, required this.mahasiswaWithBerkas});
 
   @override
-  State<SemproMahasiswaPage> createState() => _SemproMahasiswaPageState();
+  State<SemhasMahasiswaPage> createState() => _SemhasMahasiswaPageState();
 }
 
-class _SemproMahasiswaPageState extends State<SemproMahasiswaPage> {
+class _SemhasMahasiswaPageState extends State<SemhasMahasiswaPage> {
   final fileController = Get.find<FileController>();
   final _formKey = GlobalKey<FormState>();
 
@@ -37,7 +38,7 @@ class _SemproMahasiswaPageState extends State<SemproMahasiswaPage> {
           child: Padding(
             padding: const EdgeInsets.only(left: 15, bottom: 10),
             child: Text(
-              "Form Seminar Proposal",
+              "Form Seminar Hasil",
               style: blackTextStyle.copyWith(
                 fontSize: 18,
                 fontWeight: medium,
@@ -57,7 +58,7 @@ class _SemproMahasiswaPageState extends State<SemproMahasiswaPage> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    KoorOpenfileSempro(
+                    KoorOpenfileSemhas(
                       mahasiswaWithBerkas: widget.mahasiswaWithBerkas,
                     ),
                     Padding(

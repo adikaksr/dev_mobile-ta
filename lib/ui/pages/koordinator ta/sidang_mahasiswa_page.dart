@@ -6,6 +6,7 @@ import 'package:easkripsi/ui/widgets/custom_button.dart';
 import 'package:easkripsi/ui/widgets/custom_filepicker.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
 import 'package:easkripsi/ui/widgets/koor_openfile_sempro.dart';
+import 'package:easkripsi/ui/widgets/koor_openfile_sidang.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,15 +14,15 @@ import 'package:get/get.dart';
 import '../../../shared/theme.dart';
 import '../../shared/theme.dart';
 
-class SemproMahasiswaPage extends StatefulWidget {
+class SidangMahasiswaPage extends StatefulWidget {
   final List<Map<String, dynamic>> mahasiswaWithBerkas;
-  const SemproMahasiswaPage({super.key, required this.mahasiswaWithBerkas});
+  const SidangMahasiswaPage({super.key, required this.mahasiswaWithBerkas});
 
   @override
-  State<SemproMahasiswaPage> createState() => _SemproMahasiswaPageState();
+  State<SidangMahasiswaPage> createState() => _SidangMahasiswaPageState();
 }
 
-class _SemproMahasiswaPageState extends State<SemproMahasiswaPage> {
+class _SidangMahasiswaPageState extends State<SidangMahasiswaPage> {
   final fileController = Get.find<FileController>();
   final _formKey = GlobalKey<FormState>();
 
@@ -37,7 +38,7 @@ class _SemproMahasiswaPageState extends State<SemproMahasiswaPage> {
           child: Padding(
             padding: const EdgeInsets.only(left: 15, bottom: 10),
             child: Text(
-              "Form Seminar Proposal",
+              "Form Sidang Tugas Akhir",
               style: blackTextStyle.copyWith(
                 fontSize: 18,
                 fontWeight: medium,
@@ -57,7 +58,7 @@ class _SemproMahasiswaPageState extends State<SemproMahasiswaPage> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    KoorOpenfileSempro(
+                    KoorOpenfileSidang(
                       mahasiswaWithBerkas: widget.mahasiswaWithBerkas,
                     ),
                     Padding(
