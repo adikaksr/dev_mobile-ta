@@ -1,14 +1,38 @@
+import 'dart:io';
+
+import 'package:easkripsi/controller/file_controller.dart';
+import 'package:easkripsi/ui/pages/home_page.dart';
 import 'package:easkripsi/ui/pages/second_form_page.dart';
 import 'package:easkripsi/ui/widgets/custom_button.dart';
+import 'package:easkripsi/ui/widgets/custom_filepicker.dart';
+import 'package:easkripsi/ui/widgets/custom_filepicker_sidang.dart';
 import 'package:easkripsi/ui/widgets/custom_text_form_field.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import '../../shared/theme.dart';
 
-class SidangFormPage extends StatelessWidget {
+class SidangFormPage extends StatefulWidget {
   const SidangFormPage({super.key});
 
-  // final _formKey = GlobalKey<FormState>();
+  @override
+  State<SidangFormPage> createState() => _SidangFormPageState();
+}
+
+class _SidangFormPageState extends State<SidangFormPage> {
+  final fileController = Get.find<FileController>();
+  final _formKey = GlobalKey<FormState>();
+
+  Future<void> snackback() async {
+    await Future.delayed(Duration.zero, () {
+      Get.back();
+    });
+    Get.snackbar(
+      'Selesai',
+      'File telah berhasil diupload',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +57,7 @@ class SidangFormPage extends StatelessWidget {
         elevation: 1,
       ),
       body: Stack(
-        // key: _formKey,
+        key: _formKey,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -41,40 +65,19 @@ class SidangFormPage extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    // const CustomTextFormField(
-                    //   title: 'Nama Lengkap',
-                    //   hintText: 'Nama Lengkap Anda',
-                    // ),
-                    // const CustomTextFormField(
-                    //   title: 'Tempat/Tanggal Lahir',
-                    //   hintText: 'Tempat/Tanggal Lahir Anda',
-                    // ),
-                    // const CustomTextFormField(
-                    //   title: 'NPM',
-                    //   hintText: 'NPM Anda',
-                    // ),
-                    // const CustomTextFormField(
-                    //   title: 'Prodi/Jurusan',
-                    //   hintText: 'Prodi/Jurusan Anda',
-                    // ),
+                    CustomFilePickerSidang(),
                     Padding(
                       padding: const EdgeInsets.only(
                         top: 30,
-                        bottom: 70.0,
+                        bottom: 45.0,
+                        left: 8,
                       ),
                       child: CustomButton(
-                          title: 'Selanjutnya',
-                          onPressed: () {
-                            // if (_formKey.currentState != null &&
-                            //     _formKey.currentState!.validate()) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SecondFormPage()),
-                            );
-                          }
-                          // },
-                          ),
+                        title: 'Selesai',
+                        onPressed: () {
+                          snackback();
+                        },
+                      ),
                     ),
                   ],
                 ),

@@ -65,6 +65,40 @@ class _HomePageState extends State<HomePage> {
           }
         });
       });
+      _readDospeng1(data['nimNip']).then((data) {
+        print(data['nimNip']);
+        setState(() {
+          if (data.isNotEmpty) {
+            currentDospeng1 = Dosen(
+              nimNip: data['nimNip'],
+              name: data['name'],
+            );
+          }
+        });
+      });
+      _readDospeng2(data['nimNip']).then((data) {
+        print(data['nimNip']);
+        setState(() {
+          if (data.isNotEmpty) {
+            currentDospeng2 = Dosen(
+              nimNip: data['nimNip'],
+              name: data['name'],
+            );
+          }
+        });
+      });
+      _readDospeng3(data['nimNip']).then((data) {
+        print(data['nimNip']);
+        setState(() {
+          if (data.isNotEmpty) {
+            currentDospeng3 = Dosen(
+              nimNip: data['nimNip'],
+              name: data['name'],
+            );
+          }
+        });
+      });
+
       setState(() {
         userData = data;
         textController.updateData(data['nimNip']);
@@ -104,6 +138,66 @@ class _HomePageState extends State<HomePage> {
         return data['dospem_2'] as Map<String, dynamic>;
       } else {
         print('dospem_2 does not exist');
+        return {};
+      }
+    } else {
+      print('Document does not exist');
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> _readDospeng1(String mahasiswaNim) async {
+    QuerySnapshot querySnapshot = await firestore
+        .collection('Mahasiswa')
+        .where('nimNip', isEqualTo: mahasiswaNim)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      if (data.containsKey('dospeng_1')) {
+        return data['dospeng_1'] as Map<String, dynamic>;
+      } else {
+        print('dospeng_1 does not exist');
+        return {};
+      }
+    } else {
+      print('Document does not exist');
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> _readDospeng2(String mahasiswaNim) async {
+    QuerySnapshot querySnapshot = await firestore
+        .collection('Mahasiswa')
+        .where('nimNip', isEqualTo: mahasiswaNim)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      if (data.containsKey('dospeng_2')) {
+        return data['dospeng_2'] as Map<String, dynamic>;
+      } else {
+        print('dospeng_2 does not exist');
+        return {};
+      }
+    } else {
+      print('Document does not exist');
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> _readDospeng3(String mahasiswaNim) async {
+    QuerySnapshot querySnapshot = await firestore
+        .collection('Mahasiswa')
+        .where('nimNip', isEqualTo: mahasiswaNim)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      if (data.containsKey('dospeng_3')) {
+        return data['dospeng_3'] as Map<String, dynamic>;
+      } else {
+        print('dospem_3 does not exist');
         return {};
       }
     } else {
@@ -677,77 +771,6 @@ class _HomePageState extends State<HomePage> {
                     status: 'Pembimbing 2',
                     imageUrl: 'assets/Acatar.png',
                   ),
-            // Container(
-            //   margin: EdgeInsets.only(top: 16),
-            //   height: 70,
-            //   width: 350,
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(18),
-            //     border: Border.all(
-            //       color: Colors.blue, // Set border color
-            //       width: 2, // Set border width
-            //     ),
-            //   ),
-            //   child: ElevatedButton.icon(
-            //     onPressed: () {
-            //       showDialog(
-            //         context: context,
-            //         builder: (context) => AlertDialog(
-            //           title: Text('Masukkan NIP'),
-            //           content: TextFormField(
-            //             decoration: InputDecoration(labelText: 'NIP'),
-            //           ),
-            //           actions: [
-            //             TextButton(
-            //               child: Text('Cancel'),
-            //               onPressed: () => Navigator.of(context).pop(),
-            //             ),
-            //             TextButton(
-            //               child: Text('OK'),
-            //               onPressed: () {
-            //                 void getDosen(String nimNip) async {
-            //                   var firestore;
-            //                   DocumentSnapshot document = await firestore
-            //                       .collection('dosen')
-            //                       .doc(nimNip)
-            //                       .get();
-            //                   if (document.exists) {
-            //                     print('Dosen data: ${document.data()}');
-            //                   } else {
-            //                     print('No dosen found with nip: $nimNip');
-            //                   }
-            //                 }
-
-            //                 bool _showDosenTile;
-            //                 setState(() => _showDosenTile = true);
-            //                 Navigator.of(context).pop();
-            //               },
-            //             ),
-            //           ],
-            //         ),
-            //       );
-            //     },
-            //     icon: Icon(
-            //       Icons.add,
-            //       color: Colors.blue,
-            //     ),
-            //     label: Text(
-            //       'Tambah Dosen Pembimbing 2',
-            //       style: blackTextStyle.copyWith(
-            //         fontSize: 14,
-            //         fontWeight: medium,
-            //       ),
-            //     ),
-            //     style: ButtonStyle(
-            //       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            //         RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(18),
-            //         ),
-            //       ),
-            //       elevation: MaterialStateProperty.all(0),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       );
@@ -770,180 +793,376 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: semiBold,
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(top: 16),
-              height: 70,
-              width: 350,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: Colors.blue, // Set border color
-                  width: 2, // Set border width
-                ),
-              ),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Masukkan NIP'),
-                      content: TextFormField(
-                        decoration: InputDecoration(labelText: 'NIP'),
-                      ),
-                      actions: [
-                        TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                        TextButton(
-                          child: Text('OK'),
-                          onPressed: () {
-                            bool _showDosenTile;
-                            setState(() => _showDosenTile = true);
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.blue,
-                ),
-                label: Text(
-                  'Tambah Dosen Penguji 1',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                ),
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
+            currentDospeng1 == null
+                ? Container(
+                    margin: EdgeInsets.only(top: 16),
+                    height: 70,
+                    width: 350,
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
-                    ),
-                  ),
-                  elevation: MaterialStateProperty.all(0),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 16),
-              height: 70,
-              width: 350,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: Colors.blue, // Set border color
-                  width: 2, // Set border width
-                ),
-              ),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Masukkan NIP'),
-                      content: TextFormField(
-                        decoration: InputDecoration(labelText: 'NIP'),
+                      border: Border.all(
+                        color: Colors.blue, // Set border color
+                        width: 2, // Set border width
                       ),
-                      actions: [
-                        TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                        TextButton(
-                          child: Text('OK'),
-                          onPressed: () {
-                            bool _showDosenTile;
-                            setState(() => _showDosenTile = true);
-                            Navigator.of(context).pop();
+                    ),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            String nimNip = '';
+                            return AlertDialog(
+                              title: Text('Masukkan NIP'),
+                              content: TextFormField(
+                                decoration: InputDecoration(labelText: 'NIP'),
+                                onChanged: (value) {
+                                  nimNip = value;
+                                  print(nimNip);
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                TextButton(
+                                  child: Text('OK'),
+                                  onPressed: () {
+                                    final query = firestore
+                                        .collection('Dosen')
+                                        .where('nimNip', isEqualTo: nimNip);
+                                    query
+                                        .get()
+                                        .then((QuerySnapshot querySnapshot) {
+                                      querySnapshot.docs.forEach((doc) {
+                                        final data = doc.data() as Map<String,
+                                            dynamic>; // Get data from doc
+                                        setState(() {
+                                          currentDospeng1 = Dosen(
+                                            nimNip: data['nimNip'],
+                                            name: data['name'],
+                                          );
+                                        });
+
+                                        // Get the currently logged in Mahasiswa's nim
+                                        final mahasiswaNim =
+                                            userData['nimNip'] ?? 'Unknown Nim';
+
+                                        print('mahasiswaNim' + mahasiswaNim);
+
+                                        firestore
+                                            .collection('Mahasiswa')
+                                            .where('nimNip',
+                                                isEqualTo: mahasiswaNim)
+                                            .get()
+                                            .then(
+                                                (QuerySnapshot querySnapshot) {
+                                          querySnapshot.docs.forEach((doc) {
+                                            doc.reference.update({
+                                              'dospeng_1': {
+                                                'name': data['name'],
+                                                'nimNip': data['nimNip'],
+                                                'status': false,
+                                              },
+                                              // Update other fields as needed
+                                            }).then((_) {
+                                              print("Dosen Pembimbing Updated");
+                                            }).catchError((error) {
+                                              print(
+                                                  "Failed to update Dosen Penguji: $error");
+                                            });
+                                          });
+                                        }).catchError((error) {
+                                          print(error);
+                                        });
+                                      });
+                                    }).catchError((error) {
+                                      print(error);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
                           },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.blue,
-                ),
-                label: Text(
-                  'Tambah Dosen Penguj 2',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
-                  ),
-                ),
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                  ),
-                  elevation: MaterialStateProperty.all(0),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 16),
-              height: 70,
-              width: 350,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: Colors.blue, // Set border color
-                  width: 2, // Set border width
-                ),
-              ),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Masukkan NIP'),
-                      content: TextFormField(
-                        decoration: InputDecoration(labelText: 'NIP'),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.blue,
                       ),
-                      actions: [
-                        TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () => Navigator.of(context).pop(),
+                      label: Text(
+                        'Tambah Dosen Penguji 1',
+                        style: blackTextStyle.copyWith(
+                          fontSize: 14,
+                          fontWeight: medium,
                         ),
-                        TextButton(
-                          child: Text('OK'),
-                          onPressed: () {
-                            bool _showDosenTile;
-                            setState(() => _showDosenTile = true);
-                            Navigator.of(context).pop();
-                          },
+                      ),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
                         ),
-                      ],
+                        elevation: MaterialStateProperty.all(0),
+                      ),
                     ),
-                  );
-                },
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.blue,
-                ),
-                label: Text(
-                  'Tambah Dosen Penguj 3',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: medium,
+                  )
+                : DosenTile(
+                    nip: currentDospeng1!.nimNip,
+                    name: currentDospeng1!.name,
+                    status: 'Penguji 1',
+                    imageUrl: 'assets/Acatar.png',
                   ),
-                ),
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
+
+            // DOSPENG 2
+            currentDospeng2 == null
+                ? Container(
+                    margin: EdgeInsets.only(top: 16),
+                    height: 70,
+                    width: 350,
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: Colors.blue, // Set border color
+                        width: 2, // Set border width
+                      ),
                     ),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            String nimNip = '';
+                            return AlertDialog(
+                              title: Text('Masukkan NIP'),
+                              content: TextFormField(
+                                decoration: InputDecoration(labelText: 'NIP'),
+                                onChanged: (value) {
+                                  nimNip = value;
+                                  print(nimNip);
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                TextButton(
+                                  child: Text('OK'),
+                                  onPressed: () {
+                                    final query = firestore
+                                        .collection('Dosen')
+                                        .where('nimNip', isEqualTo: nimNip);
+                                    query
+                                        .get()
+                                        .then((QuerySnapshot querySnapshot) {
+                                      querySnapshot.docs.forEach((doc) {
+                                        final data = doc.data() as Map<String,
+                                            dynamic>; // Get data from doc
+                                        setState(() {
+                                          currentDospeng2 = Dosen(
+                                            nimNip: data['nimNip'],
+                                            name: data['name'],
+                                          );
+                                        });
+
+                                        // Get the currently logged in Mahasiswa's nim
+                                        final mahasiswaNim =
+                                            userData['nimNip'] ?? 'Unknown Nim';
+
+                                        print('mahasiswaNim' + mahasiswaNim);
+
+                                        firestore
+                                            .collection('Mahasiswa')
+                                            .where('nimNip',
+                                                isEqualTo: mahasiswaNim)
+                                            .get()
+                                            .then(
+                                                (QuerySnapshot querySnapshot) {
+                                          querySnapshot.docs.forEach((doc) {
+                                            doc.reference.update({
+                                              'dospeng_2': {
+                                                'name': data['name'],
+                                                'nimNip': data['nimNip'],
+                                                'status': false,
+                                              },
+                                              // Update other fields as needed
+                                            }).then((_) {
+                                              print("Dosen Pembimbing Updated");
+                                            }).catchError((error) {
+                                              print(
+                                                  "Failed to update Dosen Penguji: $error");
+                                            });
+                                          });
+                                        }).catchError((error) {
+                                          print(error);
+                                        });
+                                      });
+                                    }).catchError((error) {
+                                      print(error);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.blue,
+                      ),
+                      label: Text(
+                        'Tambah Dosen Penguji 2',
+                        style: blackTextStyle.copyWith(
+                          fontSize: 14,
+                          fontWeight: medium,
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                        elevation: MaterialStateProperty.all(0),
+                      ),
+                    ),
+                  )
+                : DosenTile(
+                    nip: currentDospeng2!.nimNip,
+                    name: currentDospeng2!.name,
+                    status: 'Penguji 2',
+                    imageUrl: 'assets/Acatar.png',
                   ),
-                  elevation: MaterialStateProperty.all(0),
-                ),
-              ),
-            ),
+
+            // DOSPENG 3
+            currentDospeng3 == null
+                ? Container(
+                    margin: EdgeInsets.only(top: 16),
+                    height: 70,
+                    width: 350,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: Colors.blue, // Set border color
+                        width: 2, // Set border width
+                      ),
+                    ),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            String nimNip = '';
+                            return AlertDialog(
+                              title: Text('Masukkan NIP'),
+                              content: TextFormField(
+                                decoration: InputDecoration(labelText: 'NIP'),
+                                onChanged: (value) {
+                                  nimNip = value;
+                                  print(nimNip);
+                                },
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                TextButton(
+                                  child: Text('OK'),
+                                  onPressed: () {
+                                    final query = firestore
+                                        .collection('Dosen')
+                                        .where('nimNip', isEqualTo: nimNip);
+                                    query
+                                        .get()
+                                        .then((QuerySnapshot querySnapshot) {
+                                      querySnapshot.docs.forEach((doc) {
+                                        final data = doc.data() as Map<String,
+                                            dynamic>; // Get data from doc
+                                        setState(() {
+                                          currentDospeng3 = Dosen(
+                                            nimNip: data['nimNip'],
+                                            name: data['name'],
+                                          );
+                                        });
+
+                                        // Get the currently logged in Mahasiswa's nim
+                                        final mahasiswaNim =
+                                            userData['nimNip'] ?? 'Unknown Nim';
+
+                                        print('mahasiswaNim' + mahasiswaNim);
+
+                                        firestore
+                                            .collection('Mahasiswa')
+                                            .where('nimNip',
+                                                isEqualTo: mahasiswaNim)
+                                            .get()
+                                            .then(
+                                                (QuerySnapshot querySnapshot) {
+                                          querySnapshot.docs.forEach((doc) {
+                                            doc.reference.update({
+                                              'dospeng_3': {
+                                                'name': data['name'],
+                                                'nimNip': data['nimNip'],
+                                                'status': false,
+                                              },
+                                              // Update other fields as needed
+                                            }).then((_) {
+                                              print("Dosen Pembimbing Updated");
+                                            }).catchError((error) {
+                                              print(
+                                                  "Failed to update Dosen Penguji: $error");
+                                            });
+                                          });
+                                        }).catchError((error) {
+                                          print(error);
+                                        });
+                                      });
+                                    }).catchError((error) {
+                                      print(error);
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        color: Colors.blue,
+                      ),
+                      label: Text(
+                        'Tambah Dosen Penguji 3',
+                        style: blackTextStyle.copyWith(
+                          fontSize: 14,
+                          fontWeight: medium,
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                        elevation: MaterialStateProperty.all(0),
+                      ),
+                    ),
+                  )
+                : DosenTile(
+                    nip: currentDospeng3!.nimNip,
+                    name: currentDospeng3!.name,
+                    status: 'Penguji 3',
+                    imageUrl: 'assets/Acatar.png',
+                  ),
             SizedBox(
               height: 100,
             )

@@ -23,15 +23,6 @@ class _SemproFormPageState extends State<SemproFormPage> {
   final fileController = Get.find<FileController>();
   final _formKey = GlobalKey<FormState>();
 
-  // Future<void> pickFileJIF01() async {
-  //   final result = await FilePicker.platform.pickFiles();
-  //   if (result != null) {
-  //     setState(() {
-  //       _fileJIF01 = File(result.files.single.path!);
-  //     });
-  //   }
-  // }
-
   Future<void> snackback() async {
     await Future.delayed(Duration.zero, () {
       Get.back();
